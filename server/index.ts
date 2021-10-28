@@ -1,36 +1,40 @@
-/**
- * Required External Modules
- */
-
-import * as dotenv from "dotenv";
-import express from "express";
+import express, { Request, Response, NextFunction } from 'express';
 import cors from "cors";
 
-dotenv.config();
+import mongoose from 'mongoose';
+import router from './router/';
 
-/**
- * App Variables
- */
+// require('dotenv').config({ path: __dirname+'/.env' });
 
-if (!process.env.PORT) {
-    process.exit(1);
- }
- 
- const PORT: number = parseInt(process.env.PORT as string, 10);
- 
- const app = express();
+// if (!process.env.PORT) {
+//     process.exit(1);
+// }
 
-/**
- *  App Configuration
- */
+mongoose.connect("mongodb://localhost:27017/car-insurer").then(() => {
+    const app = express();
+    app.use(cors({
+        origin: ['http://localhost:4200'],
+        // credentials: true
+    }));
+    app.use(express.json());
 
-app.use(cors());
-app.use(express.json());
+    //TODO: config routes
+    app.use('/api/insurance', router.insurance);
 
-/**
- * Server Activation
- */
+    app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
+        console.error(err);
+        res.status(500).send(err.message);
+        console.log('*'.repeat(90))
+    });
 
-app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
-  });
+    const PORT: number = 7000;
+    app.listen(PORT, () => {
+        console.log(`Listening on port ${PORT}`);
+    });
+
+})
+
+
+//app.use(express.urlencoded({ extended: false }));
+
+
