@@ -2,7 +2,8 @@ import IInsuranceCreate from "../interfaces/insurance/IInsuranceCreate";
 import { InsuranceModel } from "../models/insurance";
 
 export function creaeteInsurance(insurance: IInsuranceCreate){
-    return InsuranceModel.create(insurance);
+    const { startDate, cost, dueAmount, installmentType } = insurance;
+    return InsuranceModel.create({ startDate, cost, dueAmount, installmentType, });
 }
 
 export default {

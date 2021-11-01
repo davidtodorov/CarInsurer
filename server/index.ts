@@ -14,9 +14,10 @@ mongoose.connect("mongodb://localhost:27017/car-insurer").then(() => {
     const app = express();
     app.use(cors({
         origin: ['http://localhost:4200'],
-        // credentials: true
+        credentials: true
     }));
     app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
 
     routes(app);
 
@@ -30,10 +31,8 @@ mongoose.connect("mongodb://localhost:27017/car-insurer").then(() => {
     app.listen(PORT, () => {
         console.log(`Listening on port ${PORT}`);
     });
+});
 
-})
 
-
-//app.use(express.urlencoded({ extended: false }));
 
 

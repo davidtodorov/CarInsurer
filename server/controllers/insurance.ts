@@ -1,17 +1,20 @@
-import  { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import IInsuranceCreate from '../interfaces/insurance/IInsuranceCreate';
+import IUserCreate from '../interfaces/user/IUserCreate';
 import { IInsurance } from '../models/insurance';
+import { UserModel } from '../models/user';
+import carService from '../services/carService';
 import insuranceService from '../services/insuranceService'
+import userService from '../services/userService';
 
 
 export default {
-    get: (req: Request, res: Response, next: NextFunction) => {
+    get: async (req: Request, res: Response, next: NextFunction) => {
         return res.send("good");
     },
-    post: (req: Request, res: Response, next: NextFunction) => {
-        const insurance:IInsuranceCreate = req.body;
-        console.log(insurance);
-        insuranceService.creaeteInsurance(insurance);
-        res.send("done");
+    post: async (req: Request, res: Response, next: NextFunction) => {
+        const reqModel: IInsuranceCreate = req.body;
+        const insurance = UserModel.create(reqModel);
+        res.send(insurance);
     }
 }

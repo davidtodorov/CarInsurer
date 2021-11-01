@@ -1,8 +1,8 @@
 import { ICar } from "../../models/car";
-import IUserCreate from "../user/IUserCreate";
+import { IUser } from "../../models/user";
 
 export default interface ICarCreate {
     plateNumber: ICar['plateNumber'],
     productionYear: ICar['productionYear'],
-    owner: IUserCreate
+    owner: IUser['_id']
 }

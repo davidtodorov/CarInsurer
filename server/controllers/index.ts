@@ -1,6 +1,10 @@
-import insurance from './insurance'
+import insurance from './insurance';
+import user from './user';
+import car from './car';
 
 
 export default {
-    insurance
+    insurance,
+    user,
+    car
 }
