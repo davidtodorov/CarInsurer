@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from "cors";
 
 import mongoose from 'mongoose';
-import router from './router/';
+import routes from './config/routes';
 
 // require('dotenv').config({ path: __dirname+'/.env' });
 
@@ -18,8 +18,7 @@ mongoose.connect("mongodb://localhost:27017/car-insurer").then(() => {
     }));
     app.use(express.json());
 
-    //TODO: config routes
-    app.use('/api/insurance', router.insurance);
+    routes(app);
 
     app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
         console.error(err);
