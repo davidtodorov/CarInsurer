@@ -1,5 +1,6 @@
 import { Schema, model, ObjectId } from 'mongoose';
 import { ICar } from './car';
+import { IInstallment } from './installment';
 
 const { String, Number, Date, ObjectId } = Schema.Types;
 
@@ -11,9 +12,11 @@ export enum InstallmentType {
 
 export interface IInsurance {
     startDate: Date;
+    endDate: Date;
     cost: Schema.Types.Number;
     dueAmount: Schema.Types.Number;
-    installmentType: String
+    installmentType: String;
+    installments: IInstallment[];
     car: ICar['_id'];
 
 }
@@ -26,6 +29,11 @@ const insuranceSchema = new Schema<IInsurance>({
         enum: Object.values(InstallmentType),
         required: true
     },
+    installments: [{
+        type: ObjectId,
+        ref: 'Installment'
+
+    }],
     car: { type: ObjectId, ref: 'Car', required: false },
 });
-export const InsuranceModel = model<IInsurance>('Insurance', insuranceSchema);
+export const Insurance = model<IInsurance>('Insurance', insuranceSchema);

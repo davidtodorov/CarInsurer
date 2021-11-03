@@ -15,4 +15,4 @@ const carSchema =  new Schema<ICar>({
     owner: { type: ObjectId, ref: 'User',  required: true },
 });
 
-export const CarModel = model<ICar>('Car', carSchema);
+export const Car = model<ICar>('Car', carSchema);

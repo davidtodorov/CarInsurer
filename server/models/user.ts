@@ -15,4 +15,4 @@ const UserSchema = new Schema<IUser>({
     identityNumber: { type: Number, required: true }
 });
 
-export const UserModel = model<IUser>('User', UserSchema);
+export const User = model<IUser>('User', UserSchema);
