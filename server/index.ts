@@ -10,7 +10,7 @@ import routes from './config/routes';
 //     process.exit(1);
 // }
 
-mongoose.connect("mongodb://localhost:27017/car-insurer").then(() => {
+mongoose.connect("mongodb://WS460:27017,WS460:27018,WS460:27019/car-insurer?replicaSet=rs",).then(async (db) => {
     const app = express();
     app.use(cors({
         origin: ['http://localhost:4200'],
@@ -32,7 +32,3 @@ mongoose.connect("mongodb://localhost:27017/car-insurer").then(() => {
         console.log(`Listening on port ${PORT}`);
     });
 });
-
-
-
-

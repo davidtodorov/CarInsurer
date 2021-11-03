@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import IInsuranceCreate from '../interfaces/insurance/IInsuranceCreate';
-import IUserCreate from '../interfaces/user/IUserCreate';
-import { IInsurance } from '../models/insurance';
 import { UserModel } from '../models/user';
-import carService from '../services/carService';
-import insuranceService from '../services/insuranceService'
-import userService from '../services/userService';
+import insuranceService from '../services/insuranceService';
 
 
 export default {
@@ -13,8 +9,12 @@ export default {
         return res.send("good");
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
-        const reqModel: IInsuranceCreate = req.body;
-        const insurance = UserModel.create(reqModel);
-        res.send(insurance);
+        const session = await UserModel.startSession();
+        const reqModel = req.body as IInsuranceCreate;
+
+        await session.withTransaction(async () => {
+            let insurance = await insuranceService.creaeteInsurance(reqModel, session);
+            res.send(insurance);
+        });
     }
 }
