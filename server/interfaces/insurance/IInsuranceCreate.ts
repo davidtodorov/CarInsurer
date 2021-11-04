@@ -1,4 +1,3 @@
-import { ICar } from "../../models/car";
 import { IInsurance } from "../../models/insurance";
 import ICarCreate from "../car/ICarCreate";
 
