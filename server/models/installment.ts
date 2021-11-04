@@ -1,17 +1,23 @@
-import { Schema, model, ObjectId } from 'mongoose';
-import { ICar } from './car';
+import { Schema, model, ObjectId, Document } from 'mongoose';
+import { IInsurance } from './insurance';
 
 const { String, Number, Date, ObjectId, Boolean } = Schema.Types;
 
-export interface IInstallment {
+export interface IInstallment extends Document{
     startDate: Date;
     endDate: Date;
-    isPaid: Boolean
+    isPaid: Boolean,
+    insurance: IInsurance['id']
 
 }
-const insuranceSchema = new Schema<IInstallment>({
+const schema = new Schema<IInstallment>({
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
-    isPaid: { type: Boolean }
+    isPaid: { type: Boolean },
+    insurance: {
+        type: ObjectId,
+        ref: 'Insurance',
+        required: true
+    }
 });
-export const Installment = model<IInstallment>('Installment', insuranceSchema);
+export const Installment = model<IInstallment>('Installment', schema);

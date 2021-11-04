@@ -1,6 +1,6 @@
 import  { Request, Response, NextFunction } from 'express';
 import IUserCreate from '../interfaces/user/IUserCreate';
-import { UserModel } from '../models/user';
+import { User } from '../models/user';
 
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
@@ -8,7 +8,7 @@ export default {
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
         const requestModel = req.body as IUserCreate;
-        const user = await UserModel.create(requestModel);
+        const user = await User.create(requestModel);
         res.send(user);
     }
 }

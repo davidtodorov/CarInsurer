@@ -6,7 +6,7 @@ import userService from "./userService";
 async function createCar(carCreateModel: ICarCreate, session: ClientSession) {
     const owner = await userService.createUser(carCreateModel.owner, session);
     let car = carCreateModel;
-    car.owner = owner._id;
+    car.owner = owner.id;
     return new Car(car).save({ session });
 }
 

@@ -6,7 +6,7 @@ const { String, Number, Date, ObjectId } = Schema.Types;
 export interface ICar extends Document{
     plateNumber: String;
     productionYear: Date;
-    owner: IUser['_id'];
+    owner: IUser['id'];
 }
 
 const carSchema =  new Schema<ICar>({
