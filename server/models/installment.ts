@@ -1,9 +1,10 @@
-import { Schema, model, ObjectId, Document } from 'mongoose';
+import { Schema, model, ObjectId } from 'mongoose';
 import { IInsurance } from './insurance';
 
-const { String, Number, Date, ObjectId, Boolean } = Schema.Types;
+const { Date, ObjectId, Boolean } = Schema.Types;
 
-export interface IInstallment extends Document{
+export interface IInstallment {
+    id: String,
     startDate: Date;
     endDate: Date;
     isPaid: Boolean,

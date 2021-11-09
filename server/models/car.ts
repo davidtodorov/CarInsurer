@@ -1,9 +1,10 @@
-import { model, Schema, Document, ObjectId } from 'mongoose';
+import { model, Schema, ObjectId } from 'mongoose';
 import { IUser } from './user';
 
-const { String, Number, Date, ObjectId } = Schema.Types;
+const { String, Date, ObjectId } = Schema.Types;
 
-export interface ICar extends Document {
+export interface ICar {
+    id: String,
     plateNumber: String;
     productionYear: Date;
     owner: IUser['id'];

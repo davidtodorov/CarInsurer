@@ -2,7 +2,8 @@ import { Schema, Document, model } from 'mongoose';
 
 const { String, Number } = Schema.Types;
 
-export interface IUser extends Document {
+export interface IUser {
+    id: String,
     firstName: String;
     middleName: String;
     lastName: String;
