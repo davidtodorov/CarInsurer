@@ -1,11 +1,14 @@
 import { ClientSession } from 'mongoose';
+import { app } from '..';
 import IUserCreate from '../interfaces/user/IUserCreate';
 import { User } from '../models/user';
 
-function createUser(user: IUserCreate, session: ClientSession) {
-    return new User(user).save({ session });
-}
+export default class UserService {
+    constructor() {
+        
+    }
 
-export default {
-    createUser
+    public async createUser(user: IUserCreate, session: ClientSession) {
+        return new User(user).save({ session });
+    }
 }

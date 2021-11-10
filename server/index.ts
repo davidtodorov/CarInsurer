@@ -1,8 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from "cors";
 
-import mongoose from 'mongoose';
+import mongoose, { ClientSession } from 'mongoose';
 import routes from './config/routes';
+import { ServiceContainer } from './services';
 
 // require('dotenv').config({ path: __dirname+'/.env' });
 
@@ -10,8 +11,20 @@ import routes from './config/routes';
 //     process.exit(1);
 // }
 
+declare global {
+    namespace Express {
+        interface Application {
+            serviceContainer: ServiceContainer;
+            session: ClientSession
+        }
+    }
+}
+
+export const app: express.Application = express();
+
 mongoose.connect("mongodb://WS460:27017,WS460:27018,WS460:27019/car-insurer?replicaSet=rs",).then(async (db) => {
-    const app = express();
+    app.serviceContainer = new ServiceContainer();
+
     app.use(cors({
         origin: ['http://localhost:4200'],
         credentials: true

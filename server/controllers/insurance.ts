@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
+import mongoose from 'mongoose';
+import { app } from '..';
 import IInsuranceCreate from '../interfaces/insurance/IInsuranceCreate';
-import { User } from '../models/user';
-import insuranceService from '../services/insuranceService';
 
 
 export default {
@@ -9,12 +9,14 @@ export default {
         return res.send("good");
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
-        const session = await User.startSession();
+        const session = await mongoose.startSession();
         const reqModel = req.body as IInsuranceCreate;
 
         await session.withTransaction(async () => {
-            let insurance = await insuranceService.creaeteInsurance(reqModel, session);
+            let insurance = await app.serviceContainer.insuranceService.createInsurance(reqModel, session);
             res.send(insurance);
         });
+
+        session.endSession();
     }
 }
