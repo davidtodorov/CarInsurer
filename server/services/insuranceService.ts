@@ -1,36 +1,31 @@
 import { ClientSession } from "mongoose";
 import moment from 'moment'
-import IInsuranceCreate from "../interfaces/insurance/IInsuranceCreate";
 import { IInsurance, InstallmentType, Insurance } from "../models/insurance";
 import { IInstallment, Installment } from "../models/installment";
-import CarService from "./carService";
 
 export default class InsuranceService {
-    constructor(private carService: CarService) {
+    constructor() {
         
     }
 
-    public async createInsurance(insuranceCreateModel: IInsuranceCreate, session: ClientSession) {
-        const createdCar = await this.carService.createCar(insuranceCreateModel.car, session);
-    
-        insuranceCreateModel.startDate = this.getStartDate(insuranceCreateModel);
-        insuranceCreateModel.car = createdCar.id;
-    
+    public async createInsurance(model: IInsurance, session: ClientSession) {
+        model.startDate = this.getStartDate(model);
+        
         let insurance = new Insurance({
-            ...insuranceCreateModel,
-            endDate: this.getEndDate(insuranceCreateModel),
+            ...model,
+            endDate: this.getEndDate(model),
         });
     
         insurance.installments = await this.getInstallments(insurance, session);
         return new Insurance(insurance).save({ session });
     }
 
-    private getStartDate(model: IInsuranceCreate): Date {
+    private getStartDate(model: IInsurance): Date {
         const startDate = moment(model.startDate).startOf('day').toDate();
         return startDate;
     }
 
-    private getEndDate(model: IInsuranceCreate): Date {
+    private getEndDate(model: IInsurance): Date {
         const endDate = moment(model.startDate).add(1, 'years').subtract(1, 'days').endOf('day').toDate();
         return endDate;
     }

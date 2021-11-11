@@ -1,15 +1,11 @@
 import { ClientSession } from "mongoose";
-import ICarCreate from "../interfaces/car/ICarCreate";
-import { Car } from "../models/car";
-import UserService from "./userService";
+import { Car, ICar } from "../models/car";
 
 export default class CarService {
-    constructor(private userService: UserService) {}
+    constructor() {}
     
-    public async createCar(carCreateModel: ICarCreate, session: ClientSession) {
-        const owner = await this.userService.createUser(carCreateModel.owner, session);
+    public async createCar(carCreateModel: ICar, session: ClientSession) {
         let car = carCreateModel;
-        car.owner = owner.id;
         return new Car(car).save({ session });
     }
 }

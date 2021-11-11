@@ -1,6 +1,6 @@
 import  { Request, Response, NextFunction } from 'express';
 import ICarCreate from '../interfaces/car/ICarCreate';
-import { Car } from '../models/car';
+import { Car, ICar } from '../models/car';
 
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
@@ -9,7 +9,8 @@ export default {
         return res.send(car);
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
-        const requestModel:ICarCreate = req.body;
+        const requestModel = req.body as ICar;
+        console.log(requestModel);
         const createdCar = await Car.create(requestModel);
         res.send(createdCar);
     }
