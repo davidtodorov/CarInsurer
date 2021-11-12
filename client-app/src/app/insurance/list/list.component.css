@@ -2,6 +2,12 @@ table {
     width: 100%;
 }
 
-* {
+#createButton, table {
     margin-top: 20px;
+}
+
+mat-divider{
+    height: 20px;
+    display: inline-block;
+    margin: 0 10px;
 }

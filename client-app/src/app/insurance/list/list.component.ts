@@ -11,7 +11,7 @@ export class ListComponent implements OnInit {
 
   public insurances: any[] = [];
 
-  public displayedColumns: string[] = ['owner', 'plateNumber', 'startDate', 'endDate', 'cost', 'dueAmount']
+  public displayedColumns: string[] = ['owner', 'plateNumber', 'startDate', 'endDate', 'cost', 'dueAmount', 'actions']
   constructor(private insuranceService: InsuranceService) { }
 
   ngOnInit(): void {
