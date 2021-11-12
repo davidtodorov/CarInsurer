@@ -26,8 +26,8 @@ mongoose.connect("mongodb://WS460:27017,WS460:27018,WS460:27019/car-insurer?repl
     app.serviceContainer = new ServiceContainer();
 
     app.use(cors({
-        origin: ['http://localhost:4200'],
-        credentials: true
+        origin: 'http://localhost:4200'
+        //credentials: true
     }));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));

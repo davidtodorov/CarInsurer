@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CoreModule } from './core/core.module';
 import { MaterialModule } from './material/material.module';
+import { InsuranceModule } from './insurance/insurance.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -14,10 +16,12 @@ import { MaterialModule } from './material/material.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
     MaterialModule,
     CoreModule,
+    InsuranceModule
   ],
   providers: [],
   bootstrap: [AppComponent]
