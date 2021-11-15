@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    redirectTo: '/insurances'
+  },
+  {
+    path: 'insurances',
     component: ListComponent
   },
   {

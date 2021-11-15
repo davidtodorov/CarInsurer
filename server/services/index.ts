@@ -14,7 +14,7 @@ export class ServiceContainer {
         this.userService = new UserService();
         this.carService = new CarService();
         this.insuranceService = new InsuranceService();
-        this.insuranceWorkflow = new InsuranceWorkflow(this.insuranceService, this.carService, this.userService)
+        this.insuranceWorkflow = new InsuranceWorkflow(this.insuranceService, this.carService, this.userService);
     }
 
     public init(){

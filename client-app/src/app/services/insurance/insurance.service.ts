@@ -10,6 +10,6 @@ export class InsuranceService {
   constructor(private http: HttpClient) { }
 
   public loadInsurances(id?: number) {
-    return this.http.get<any[]>('http://localhost:7000/api/insurance');
+    return this.http.get<any[]>(environment.apiBaseUrl + '/insurances');
   }
 }
