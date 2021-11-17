@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-form',
@@ -7,85 +8,75 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./create-form.component.css']
 })
 export class CreateFormComponent {
-  addressForm = this.fb.group({
-    company: null,
-    firstName: [null, Validators.required],
-    lastName: [null, Validators.required],
-    address: [null, Validators.required],
-    address2: null,
-    city: [null, Validators.required],
-    state: [null, Validators.required],
-    postalCode: [null, Validators.compose([
-      Validators.required, Validators.minLength(5), Validators.maxLength(5)])
-    ],
-    shipping: ['free', Validators.required]
-  });
+  constructor(private fb: FormBuilder) {
+    this.setEndDate(this.startDate);
+    this.createForm.get('insurance.startDate')?.valueChanges.subscribe((data) => {
+      this.setEndDate(data);
+    });
 
-  hasUnitNumber = false;
+    this.createForm.get('insurance.cost')?.valueChanges.subscribe((costValue) => {
+      let installmentTypeValue = this.createForm.get('insurance.installmentType')?.value;
+      if (installmentTypeValue) {
+        if (installmentTypeValue === 'Yearly') {
+          this.setDueAmountValue(costValue);
+        } 
+        else if ( installmentTypeValue === 'HalfYearly') {
+          this.setDueAmountValue(costValue/2);
+        }
+        else if ( installmentTypeValue === 'Quarterly') {
+          this.setDueAmountValue(costValue/4);
+        }
 
-  states = [
-    {name: 'Alabama', abbreviation: 'AL'},
-    {name: 'Alaska', abbreviation: 'AK'},
-    {name: 'American Samoa', abbreviation: 'AS'},
-    {name: 'Arizona', abbreviation: 'AZ'},
-    {name: 'Arkansas', abbreviation: 'AR'},
-    {name: 'California', abbreviation: 'CA'},
-    {name: 'Colorado', abbreviation: 'CO'},
-    {name: 'Connecticut', abbreviation: 'CT'},
-    {name: 'Delaware', abbreviation: 'DE'},
-    {name: 'District Of Columbia', abbreviation: 'DC'},
-    {name: 'Federated States Of Micronesia', abbreviation: 'FM'},
-    {name: 'Florida', abbreviation: 'FL'},
-    {name: 'Georgia', abbreviation: 'GA'},
-    {name: 'Guam', abbreviation: 'GU'},
-    {name: 'Hawaii', abbreviation: 'HI'},
-    {name: 'Idaho', abbreviation: 'ID'},
-    {name: 'Illinois', abbreviation: 'IL'},
-    {name: 'Indiana', abbreviation: 'IN'},
-    {name: 'Iowa', abbreviation: 'IA'},
-    {name: 'Kansas', abbreviation: 'KS'},
-    {name: 'Kentucky', abbreviation: 'KY'},
-    {name: 'Louisiana', abbreviation: 'LA'},
-    {name: 'Maine', abbreviation: 'ME'},
-    {name: 'Marshall Islands', abbreviation: 'MH'},
-    {name: 'Maryland', abbreviation: 'MD'},
-    {name: 'Massachusetts', abbreviation: 'MA'},
-    {name: 'Michigan', abbreviation: 'MI'},
-    {name: 'Minnesota', abbreviation: 'MN'},
-    {name: 'Mississippi', abbreviation: 'MS'},
-    {name: 'Missouri', abbreviation: 'MO'},
-    {name: 'Montana', abbreviation: 'MT'},
-    {name: 'Nebraska', abbreviation: 'NE'},
-    {name: 'Nevada', abbreviation: 'NV'},
-    {name: 'New Hampshire', abbreviation: 'NH'},
-    {name: 'New Jersey', abbreviation: 'NJ'},
-    {name: 'New Mexico', abbreviation: 'NM'},
-    {name: 'New York', abbreviation: 'NY'},
-    {name: 'North Carolina', abbreviation: 'NC'},
-    {name: 'North Dakota', abbreviation: 'ND'},
-    {name: 'Northern Mariana Islands', abbreviation: 'MP'},
-    {name: 'Ohio', abbreviation: 'OH'},
-    {name: 'Oklahoma', abbreviation: 'OK'},
-    {name: 'Oregon', abbreviation: 'OR'},
-    {name: 'Palau', abbreviation: 'PW'},
-    {name: 'Pennsylvania', abbreviation: 'PA'},
-    {name: 'Puerto Rico', abbreviation: 'PR'},
-    {name: 'Rhode Island', abbreviation: 'RI'},
-    {name: 'South Carolina', abbreviation: 'SC'},
-    {name: 'South Dakota', abbreviation: 'SD'},
-    {name: 'Tennessee', abbreviation: 'TN'},
-    {name: 'Texas', abbreviation: 'TX'},
-    {name: 'Utah', abbreviation: 'UT'},
-    {name: 'Vermont', abbreviation: 'VT'},
-    {name: 'Virgin Islands', abbreviation: 'VI'},
-    {name: 'Virginia', abbreviation: 'VA'},
-    {name: 'Washington', abbreviation: 'WA'},
-    {name: 'West Virginia', abbreviation: 'WV'},
-    {name: 'Wisconsin', abbreviation: 'WI'},
-    {name: 'Wyoming', abbreviation: 'WY'}
+      }
+      console.log('dirty: ', this.createForm.get('insurance.dueAmount')?.dirty);
+      console.log('touched: ', this.createForm.get('insurance.dueAmount')?.touched);
+    })
+  }
+
+  startDate = new Date();
+  insuranceEndDate: any;
+
+  installmentTypes = [
+    {
+      text: 'Yearly',
+      value: 'Yearly',
+    },
+    {
+      text: 'Half Yearly',
+      value: 'HalfYearly',
+    },
+    {
+      text: 'Quarterly',
+      value: 'Quarterly',
+    }
   ];
 
-  constructor(private fb: FormBuilder) {}
+  createForm = this.fb.group({
+    insurance: this.fb.group({
+      startDate: [this.startDate, [Validators.required]],
+      cost: [null, [Validators.required]],
+      dueAmount: [null, [Validators.required]],
+      installmentType: ['', [Validators.required]]
+    }),
+    car: this.fb.group({
+      plateNumber: ['', [Validators.required]],
+      productionDate: [null, [Validators.required]],
+    }),
+    owner: this.fb.group({
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      identityNumber: ['', [Validators.required]]
+    }),
+  });
+
+  private setEndDate(startDate: Date) {
+    let newDate = moment(startDate).add(1, 'years').subtract(1, 'day').toDate();
+    this.insuranceEndDate = newDate;
+  }
+
+  private setDueAmountValue(costValue: number) {
+    this.createForm.get('insurance.dueAmount')?.setValue(costValue);
+  }
 
   onSubmit(): void {
     alert('Thanks!');

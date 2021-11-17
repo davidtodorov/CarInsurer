@@ -92,7 +92,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     OverlayModule,
     PortalModule,
     ScrollingModule,
-    ReactiveFormsModule
   ]
 })
 export class MaterialModule { }

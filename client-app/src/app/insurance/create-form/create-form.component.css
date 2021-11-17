@@ -25,3 +25,17 @@
 .col:last-child {
   margin-right: 0;
 }
+
+mat-form-field {
+  margin-bottom: 15px;
+}
+
+mat-card-header {
+  justify-content: center;
+}
+
+
+mat-card-subtitle {
+  color:black;
+  font-weight: 500;
+}

@@ -1,95 +1,124 @@
-<form [formGroup]="addressForm" novalidate (ngSubmit)="onSubmit()">
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
   <mat-card class="shipping-card">
     <mat-card-header>
-      <mat-card-title>Shipping Information</mat-card-title>
+      <mat-card-title>Create Insurance</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="Company" formControlName="company">
-          </mat-form-field>
+      <!-- OWNER -->
+      <mat-card-subtitle>Owner Info</mat-card-subtitle>
+      <div formGroupName="owner" class="form-group">
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName">
+              <mat-error *ngIf="createForm.get('owner.firstName')?.hasError('required')">
+                First Name is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName">
+              <mat-error *ngIf="createForm.get('owner.lastName')?.hasError('required')">
+                Last Name is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Identity Number</mat-label>
+              <input matInput formControlName="identityNumber">
+              <mat-error *ngIf="createForm.get('owner.identityNumber')?.hasError('required')">
+                Identity Number is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="First name" formControlName="firstName">
-            <mat-error *ngIf="addressForm.controls['firstName'].hasError('required')">
-              First name is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="Last name" formControlName="lastName">
-            <mat-error *ngIf="addressForm.controls['lastName'].hasError('required')">
-              Last name is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <textarea matInput placeholder="Address" formControlName="address"></textarea>
-            <mat-error *ngIf="addressForm.controls['address'].hasError('required')">
-              Address is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
+
+      <mat-card-subtitle>Car Info</mat-card-subtitle>
+      <div formGroupName="car" class="form-group">
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Plate Number</mat-label>
+              <input matInput formControlName="plateNumber">
+              <mat-error *ngIf="createForm.get('car.plateNumber')?.hasError('required')">
+                Plate Number is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Production Date</mat-label>
+              <input matInput [matDatepicker]="productionDate" formControlName="productionDate">
+              <mat-datepicker-toggle matSuffix [for]="productionDate"></mat-datepicker-toggle>
+              <mat-datepicker #productionDate></mat-datepicker>
+              <mat-error *ngIf="createForm.get('car.productionDate')?.hasError('required')">
+                Production Date is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
       </div>
-      <div class="row" *ngIf="!hasUnitNumber">
-        <div class="col">
-          <button mat-button type="button" (click)="hasUnitNumber = !hasUnitNumber">
-            + Add C/O, Apt, Suite, Unit
-          </button>
+
+      <mat-card-subtitle>Insurance Info</mat-card-subtitle>
+      <div formGroupName="insurance" class="form-group">
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="startDate" formControlName="startDate">
+              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+              <mat-datepicker #startDate></mat-datepicker>
+              <mat-error *ngIf="createForm.get('insurance.startDate')?.hasError('required')">
+                Start Date is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="endDate" disabled [value]="this.insuranceEndDate">
+              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+              <mat-datepicker #endDate></mat-datepicker>
+            </mat-form-field>
+          </div>
         </div>
-      </div>
-      <div class="row" *ngIf="hasUnitNumber">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <textarea matInput placeholder="Address 2" formControlName="address2"></textarea>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="City" formControlName="city">
-            <mat-error *ngIf="addressForm.controls['city'].hasError('required')">
-              City is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field class="full-width">
-            <mat-select placeholder="State" formControlName="state">
-              <mat-option *ngFor="let state of states" [value]="state.abbreviation">
-                {{ state.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="addressForm.controls['state'].hasError('required')">
-              State is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput #postalCode maxlength="5" placeholder="Postal Code" type="number" formControlName="postalCode">
-            <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <mat-radio-group formControlName="shipping">
-            <mat-radio-button value="free">Free Shipping</mat-radio-button>
-            <mat-radio-button value="priority">Priority Shipping</mat-radio-button>
-            <mat-radio-button value="nextday">Next Day Shipping</mat-radio-button>
-          </mat-radio-group>
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Installment Type</mat-label>
+              <mat-select formControlName="installmentType">
+                <mat-option *ngFor="let type of installmentTypes" [value]="type.value">
+                  {{ type.text }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="createForm.get('insurance.installmentType')?.hasError('required')">
+                Installment Type is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Cost Amount</mat-label>
+              <input matInput type="number" formControlName="cost">
+              <mat-error *ngIf="createForm.get('insurance.cost')?.hasError('required')">
+                Cost Amount is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Due Amount</mat-label>
+              <input matInput type="number" formControlName="dueAmount">
+              <mat-error *ngIf="createForm.get('insurance.dueAmount')?.hasError('required')">
+                Due Amount is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
       </div>
     </mat-card-content>
@@ -98,3 +127,5 @@
     </mat-card-actions>
   </mat-card>
 </form>
+
+{{ createForm.value | json }}
