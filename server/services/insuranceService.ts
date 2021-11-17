@@ -38,7 +38,7 @@ export default class InsuranceService {
                 let installment = await new Installment({ insurance: insurance.id, startDate: insurance.startDate, endDate: insurance.endDate }).save({ session });
                 ids.push(installment.id);
                 break;
-            }
+            }   
             case InstallmentType.HalfYearly: {
                 for (let i = 0; i < 2; i++) {
                     const newStartDate = moment(insurance.startDate).add(i * 6, 'months').toDate();
