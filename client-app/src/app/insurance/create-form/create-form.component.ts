@@ -14,23 +14,20 @@ export class CreateFormComponent {
       this.setEndDate(data);
     });
 
-    this.createForm.get('insurance.cost')?.valueChanges.subscribe((costValue) => {
-      let installmentTypeValue = this.createForm.get('insurance.installmentType')?.value;
-      if (installmentTypeValue) {
-        if (installmentTypeValue === 'Yearly') {
-          this.setDueAmountValue(costValue);
-        } 
-        else if ( installmentTypeValue === 'HalfYearly') {
-          this.setDueAmountValue(costValue/2);
-        }
-        else if ( installmentTypeValue === 'Quarterly') {
-          this.setDueAmountValue(costValue/4);
-        }
+    this.createForm.get('insurance.cost')?.valueChanges.subscribe((cost) => {
+      let installmentType = this.createForm.get('insurance.installmentType')?.value;
+      if (installmentType) {
+        this.setDueAmountValue(cost, installmentType)
 
       }
-      console.log('dirty: ', this.createForm.get('insurance.dueAmount')?.dirty);
-      console.log('touched: ', this.createForm.get('insurance.dueAmount')?.touched);
-    })
+    });
+
+    this.createForm.get('insurance.installmentType')?.valueChanges.subscribe((installmentType) => {
+      let cost = this.createForm.get('insurance.cost')?.value;
+      if (cost) {
+        this.setDueAmountValue(cost, installmentType)
+      }
+    });
   }
 
   startDate = new Date();
@@ -74,8 +71,18 @@ export class CreateFormComponent {
     this.insuranceEndDate = newDate;
   }
 
-  private setDueAmountValue(costValue: number) {
-    this.createForm.get('insurance.dueAmount')?.setValue(costValue);
+  private setDueAmountValue(cost: number, installmentType: string) {
+    let newAmount = 0;
+    if (installmentType === 'Yearly') {
+      newAmount = cost
+    }
+    else if (installmentType === 'HalfYearly') {
+      newAmount = cost / 2;
+    }
+    else if (installmentType === 'Quarterly') {
+      newAmount = cost / 4
+    }
+    this.createForm.get('insurance.dueAmount')?.setValue(newAmount);
   }
 
   onSubmit(): void {
