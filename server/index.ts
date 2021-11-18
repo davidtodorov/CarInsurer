@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from "cors";
+import dotenv from "dotenv"
 
 import mongoose, { ClientSession } from 'mongoose';
 import routes from './config/routes';
@@ -20,9 +21,10 @@ declare global {
     }
 }
 
+
 export const app: express.Application = express();
 
-mongoose.connect("mongodb://WS460:27017,WS460:27018,WS460:27019/car-insurer?replicaSet=rs",).then(async (db) => {
+mongoose.connect("mongodb://WS460:27017,WS460:27018,WS460:27019/car-insurer?replicaSet=rs").then(async (db) => {
     app.serviceContainer = new ServiceContainer();
 
     app.use(cors({
