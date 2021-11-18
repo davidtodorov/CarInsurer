@@ -6,7 +6,7 @@ const { String, Date, ObjectId } = Schema.Types;
 export interface ICar {
     id: String,
     plateNumber: String;
-    productionYear: Date;
+    productionDate: Date;
     owner: IUser['id'];
 }
 
@@ -20,7 +20,7 @@ const carSchema = new Schema<ICar>({
             message: props => `${props.value} is not a valid plate number!`
         },
     },
-    productionYear: { type: Date, required: true },
+    productionDate: { type: Date, required: true },
     owner: { type: ObjectId, ref: 'User', required: true },
 });
 

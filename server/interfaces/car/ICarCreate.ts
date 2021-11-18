@@ -4,6 +4,6 @@ import IUserCreate from "../user/IUserCreate";
 
 export default interface ICarCreate {
     plateNumber: ICar['plateNumber'];
-    productionYear: ICar['productionYear'];
+    productionDate: ICar['productionDate'];
     owner: IUserCreate;
 }

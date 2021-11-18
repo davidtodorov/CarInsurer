@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { InsuranceService } from 'src/app/services/insurance/insurance.service';
 
 @Component({
   selector: 'app-create-form',
@@ -8,7 +9,7 @@ import * as moment from 'moment';
   styleUrls: ['./create-form.component.css']
 })
 export class CreateFormComponent {
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private insuranceService: InsuranceService) {
     this.setEndDate(this.startDate);
     this.createForm.get('insurance.startDate')?.valueChanges.subscribe((data) => {
       this.setEndDate(data);
@@ -86,6 +87,8 @@ export class CreateFormComponent {
   }
 
   onSubmit(): void {
-    alert('Thanks!');
+    this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
+      console.log(data);
+    });
   }
 }
