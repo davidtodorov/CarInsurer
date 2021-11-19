@@ -5,9 +5,9 @@ const { String, Number } = Schema.Types;
 export interface IUser {
     id: String,
     firstName: String;
-    middleName: String;
+    middleName?: String;
     lastName: String;
-    identityNumber: Schema.Types.Number
+    identityNumber: Number
 }
 const UserSchema = new Schema<IUser>({
     firstName: { type: String, required: true },

@@ -14,7 +14,7 @@ export default {
             populate: {
                 path: 'owner'
             }
-        })
+        });
         return res.send(insurances);
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
