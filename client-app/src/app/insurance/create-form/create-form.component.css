@@ -39,3 +39,11 @@ mat-card-subtitle {
   color:black;
   font-weight: 500;
 }
+
+.warningColor {
+  background: rgb(255, 120, 120) !important;
+}
+
+simple-snack-bar > div > button {
+  background: white !important;
+}

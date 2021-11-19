@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { InsuranceService } from 'src/app/services/insurance/insurance.service';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { plateNumberValidator } from 'src/app/shared/validators';
 
 @Component({
   selector: 'app-create-form',
@@ -9,7 +11,7 @@ import { InsuranceService } from 'src/app/services/insurance/insurance.service';
   styleUrls: ['./create-form.component.css']
 })
 export class CreateFormComponent {
-  constructor(private fb: FormBuilder, private insuranceService: InsuranceService) {
+  constructor(private fb: FormBuilder, private insuranceService: InsuranceService, private snackBar: MatSnackBar) {
     this.setEndDate(this.startDate);
     this.createForm.get('insurance.startDate')?.valueChanges.subscribe((data) => {
       this.setEndDate(data);
@@ -57,7 +59,7 @@ export class CreateFormComponent {
       installmentType: ['', [Validators.required]]
     }),
     car: this.fb.group({
-      plateNumber: ['', [Validators.required]],
+      plateNumber: ['', [this.plateNumberValidator()]],
       productionDate: [null, [Validators.required]],
     }),
     owner: this.fb.group({
@@ -89,6 +91,24 @@ export class CreateFormComponent {
   onSubmit(): void {
     this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
       console.log(data);
+    }, err => {
+      this.showSnackbarTopPosition(err.error);
+    });
+  }
+
+  plateNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const isValid = /^(E|A|B|BT|BH|BP|EB|TX|K|KH|OB|M|PA|PK|EH|PB|PP|P|CC|CH|CO|C|CA|CB|CT|T|X|H|Y)(\d{4})([A|B|E|K|M|H|O|P|C|T|Y|X]{2})$/.test(control.value);
+      return isValid ? null : { pattern: { value: control.value } };
+    };
+  }
+
+  private showSnackbarTopPosition(content:any) {
+    this.snackBar.open(content, '', {
+      duration: 5000,
+      verticalPosition: "top", // Allowed values are  'top' | 'bottom'
+      horizontalPosition: "center", // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'
+      panelClass: ['mat-toolbar', 'mat-warn']
     });
   }
 }

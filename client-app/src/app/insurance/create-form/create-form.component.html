@@ -45,8 +45,8 @@
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Plate Number</mat-label>
               <input matInput formControlName="plateNumber">
-              <mat-error *ngIf="createForm.get('car.plateNumber')?.hasError('required')">
-                Plate Number is <strong>required</strong>
+              <mat-error *ngIf="createForm.get('car.plateNumber')?.hasError('pattern')">
+                Plate Number is in <strong>wrong format</strong>
               </mat-error>
             </mat-form-field>
           </div>
