@@ -1,4 +1,5 @@
 import { expect, assert, should } from "chai";
+import { after } from "mocha";
 import { IUser, User } from "../models/user";
 import { ServiceContainer } from "../services";
 import { clearDatabase, closeDatabase, connect } from "./dbHandler";
@@ -6,16 +7,7 @@ import { clearDatabase, closeDatabase, connect } from "./dbHandler";
 let serviceContainer: ServiceContainer;
 
 before(async () => {
-     await connect();
      serviceContainer = new ServiceContainer();
-});
-
-afterEach(async () => {
-     await clearDatabase();
-});
-
-after(async () => {
-     await closeDatabase();
 });
 
 describe('user service', () => {
@@ -27,7 +19,7 @@ describe('user service', () => {
 
           //act
           try {
-               await serviceContainer.userService.createUser({ firstName: 'Gosho', lastName: 'Goshov', identityNumber: 123123 } as unknown as IUser, session);
+               await serviceContainer.userService.getOrCreateUser({ firstName: 'Gosho', lastName: 'Goshov', identityNumber: 123123 } as unknown as IUser, session);
           } catch(err: any) {
                //assert
                expect(err.message).to.be.equal("Identity number's length should be 10!");
@@ -41,7 +33,7 @@ describe('user service', () => {
 
           //act
           try {
-               await serviceContainer.userService.createUser(user as unknown as IUser, session);
+               await serviceContainer.userService.getOrCreateUser(user as unknown as IUser, session);
           } catch(err: any) {
                //assert
                expect(err.message).to.be.equal(user.identityNumber + " is not valid identity number!");
@@ -56,11 +48,10 @@ describe('user service', () => {
 
           //act
           try {
-               await serviceContainer.userService.createUser({ firstName: 'Gosho', lastName: 'Goshov', identityNumber: 123123 } as unknown as IUser, session);
-          } catch (ex) {
+               await serviceContainer.userService.getOrCreateUser({ firstName: 'Gosho', lastName: 'Goshov', identityNumber: 123123 } as unknown as IUser, session);
+          } catch (ex) { 
                //assert
                expect(ex).to.be.an('error');
           }
-
      });
 });

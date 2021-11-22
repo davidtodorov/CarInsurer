@@ -15,7 +15,6 @@ const UserSchema = new Schema<IUser>({
     lastName: { type: String, required: true },
     identityNumber: {
         type: Number, required: true,
-        
     }
 });
 

@@ -7,6 +7,8 @@ let mongod: MongoMemoryServer;
  * Connect to the in-memory database.
  */
 export async function connect() {
+    console.log("--------- CONNECT TO DATABASE ----------------")
+
     mongod = await MongoMemoryServer.create();
     const uri = mongod.getUri();
 
@@ -25,6 +27,7 @@ export async function connect() {
  */
 export async function closeDatabase() {
     if (mongod) {
+        console.log("--------- CLOSE DATABASE ----------------")
         await mongoose.connection.dropDatabase();
         await mongoose.connection.close();
         await mongod.stop();

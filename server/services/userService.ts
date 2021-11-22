@@ -8,10 +8,13 @@ export default class UserService {
 
     }
 
-    public async createUser(user: IUser, session: ClientSession) {
-        this.checkIsValidIdentityNumber(user.identityNumber)
-        await this.checkForExistingUser(user.identityNumber);
+    public async getOrCreateUser(user: IUser, session: ClientSession) {
+        await this.checkIsValidIdentityNumber(user.identityNumber);
 
+        let existingUser = await User.findOne({ identityNumber: user.identityNumber });
+        if (existingUser) {
+            return existingUser;
+        }
         return new User(user).save({ session });
     }
 
@@ -31,13 +34,6 @@ export default class UserService {
         const validDigit = sum % 11;
         if (parseInt(idNumberString[9]) !== validDigit) {
             throw new Error(`${idNumber} is not valid identity number!`);
-        }
-    }
-
-    private async checkForExistingUser(identityNumber: Number) {
-        let existingUser = await User.findOne({ identityNumber });
-        if (existingUser) {
-            throw new Error("User with identity number: " + identityNumber + " already exists!");
         }
     }
 
