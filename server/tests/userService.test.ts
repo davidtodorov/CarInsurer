@@ -12,7 +12,7 @@ before(async () => {
 
 describe('user service', () => {
 
-     it("should not add user with Identity Number's length != 10", async () => {
+     it("should throw error if identity number's length != 10", async () => {
           //arrange  
           let user = { firstName: "Gosho", lastName: "Petrov", identityNumber: 123 } as unknown as IUser;
           let session = await User.startSession();
@@ -26,7 +26,7 @@ describe('user service', () => {
           }
      });
 
-     it("should not add user with invalid Identity Number", async () => {
+     it("should throw error if identity number is invalid", async () => {
           //arrange  
           let user = { firstName: "Gosho", lastName: "Petrov", identityNumber: 1111111111 } as unknown as IUser;
           let session = await User.startSession();
@@ -40,8 +40,7 @@ describe('user service', () => {
           }
      });
 
-
-     it("should not add user with duplicated identity number", async () => {
+     it("should throw error if identity number is duplicated", async () => {
           //arrange 
           await User.create({ firstName: 'Pesho', lastName: 'Peshov', identityNumber: 123123 });
           let session = await User.startSession();

@@ -21,7 +21,7 @@ after(async () => {
 
 
 describe('car service', () => {
-     it("should not add car with invalid plate number", async () => {
+     it("should throw error if plate's number is invalid", async () => {
           //arrange  
           let owner = await User.create({ firstName: "Pesho", lastName: "Pesho", identityNumber: 9405109356})
           let car = { owner: owner.id, plateNumber: 'CB1234AA', productionDate: new Date()} as unknown as ICar;
@@ -36,7 +36,7 @@ describe('car service', () => {
           }
      });
 
-     it("should not add car with existing plate number", async () => {
+     it("should throw error if plate number is existing", async () => {
           //arrange  
           let owner = await User.create({ firstName: "Pesho", lastName: "Pesho", identityNumber: 9405109356})
           let car = { owner: owner.id, plateNumber: 'CB1234AA', productionDate: new Date()} as unknown as ICar;
