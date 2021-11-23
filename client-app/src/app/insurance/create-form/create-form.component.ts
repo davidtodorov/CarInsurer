@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators
 import * as moment from 'moment';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { InsuranceService } from '../services/insurance.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-form',
@@ -10,7 +11,7 @@ import { InsuranceService } from '../services/insurance.service';
   styleUrls: ['./create-form.component.css']
 })
 export class CreateFormComponent {
-  constructor(private fb: FormBuilder, private insuranceService: InsuranceService, private snackBar: MatSnackBar) {
+  constructor(private router: Router, private fb: FormBuilder, private insuranceService: InsuranceService, private snackBar: MatSnackBar) {
     this.setEndDate(this.startDate);
     this.createForm.get('insurance.startDate')?.valueChanges.subscribe((data) => {
       this.setEndDate(data);
@@ -89,7 +90,7 @@ export class CreateFormComponent {
 
   onSubmit(): void {
     this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
-      console.log(data);
+      this.router.navigate([''])
     }, err => {
       this.showSnackbarTopPosition(err.error);
     });
