@@ -8,7 +8,7 @@ export default class UserService {
 
     }
 
-    public async getOrCreateUser(user: IUser, session: ClientSession) {
+    public async getOrCreateUser(user: IUser, session: ClientSession): Promise<IUser> {
         await this.checkIsValidIdentityNumber(user.identityNumber);
 
         let existingUser = await User.findOne({ identityNumber: user.identityNumber });

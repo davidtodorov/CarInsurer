@@ -21,6 +21,20 @@ after(async () => {
 
 
 describe('car service', () => {
+     it("should throw error if no owner is provided", async () => {
+          //arrange  
+          let car = { plateNumber: 'CB1234AA', productionDate: new Date()} as unknown as ICar;
+          let session = await Car.startSession();
+
+          //act
+          try {
+               await serviceContainer.carService.createCar(car, session);
+          } catch(err: any) {
+               //assert
+               expect(err.message).to.be.equal(`Owner is required!`);
+          }
+     });
+
      it("should throw error if plate's number is invalid", async () => {
           //arrange  
           let owner = await User.create({ firstName: "Pesho", lastName: "Pesho", identityNumber: 9405109356})

@@ -5,19 +5,35 @@ import { IInstallment, Installment } from "../models/installment";
 
 export default class InsuranceService {
     constructor() {
-        
+
     }
 
-    public async createInsurance(model: IInsurance, session: ClientSession) {
+    public async createInsurance(model: IInsurance, session: ClientSession): Promise<IInsurance> {
         model.startDate = this.getStartDate(model);
-        
+
         let insurance = new Insurance({
             ...model,
             endDate: this.getEndDate(model),
+            dueAmount: this.getDueAmount(model)
         });
-    
+
         insurance.installments = await this.getInstallments(insurance, session);
         return new Insurance(insurance).save({ session });
+    }
+
+    private getDueAmount(model: IInsurance): number {
+        let dueAmount = 0;
+        if (model.installmentType === InstallmentType.Yearly) {
+            dueAmount = model.cost
+        }
+        else if (model.installmentType === InstallmentType.HalfYearly) {
+            dueAmount = model.cost / 2;
+        }
+        else if (model.installmentType === InstallmentType.Quarterly) {
+            dueAmount = model.cost / 4
+        }
+        
+        return dueAmount;
     }
 
     private getStartDate(model: IInsurance): Date {
@@ -32,13 +48,13 @@ export default class InsuranceService {
 
     private async getInstallments(insurance: IInsurance, session: ClientSession): Promise<IInstallment['id'][]> {
         let ids: IInstallment['id'][] = [];
-    
+
         switch (insurance.installmentType) {
             case InstallmentType.Yearly: {
                 let installment = await new Installment({ insurance: insurance.id, startDate: insurance.startDate, endDate: insurance.endDate }).save({ session });
                 ids.push(installment.id);
                 break;
-            }   
+            }
             case InstallmentType.HalfYearly: {
                 for (let i = 0; i < 2; i++) {
                     const newStartDate = moment(insurance.startDate).add(i * 6, 'months').toDate();
@@ -61,7 +77,7 @@ export default class InsuranceService {
             default:
                 break;
         }
-    
+
         return ids;
     }
 }

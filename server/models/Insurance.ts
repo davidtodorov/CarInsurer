@@ -15,8 +15,8 @@ export interface IInsurance {
     id: String,
     startDate: Date;
     endDate: Date;
-    cost: Number;
-    dueAmount: Number;
+    cost: number;
+    dueAmount: number;
     installmentType: String;
     installments: IInstallment['id'][];
     car: ICar['id'];
@@ -37,7 +37,7 @@ const insuranceSchema = new Schema<IInsurance>({
         ref: 'Installment'
 
     }],
-    car: { type: ObjectId, ref: 'Car', required: false },
+    car: { type: ObjectId, ref: 'Car', required: [true, "Car is required!"] },
 });
 
 export const Insurance = model<IInsurance>('Insurance', insuranceSchema);

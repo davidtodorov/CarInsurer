@@ -20,7 +20,7 @@ describe('user service', () => {
           //act
           try {
                await serviceContainer.userService.getOrCreateUser({ firstName: 'Gosho', lastName: 'Goshov', identityNumber: 123123 } as unknown as IUser, session);
-          } catch(err: any) {
+          } catch (err: any) {
                //assert
                expect(err.message).to.be.equal("Identity number's length should be 10!");
           }
@@ -34,23 +34,18 @@ describe('user service', () => {
           //act
           try {
                await serviceContainer.userService.getOrCreateUser(user as unknown as IUser, session);
-          } catch(err: any) {
+          } catch (err: any) {
                //assert
                expect(err.message).to.be.equal(user.identityNumber + " is not valid identity number!");
           }
      });
 
-     it("should throw error if identity number is duplicated", async () => {
+     it("should get user if already exists", async () => {
           //arrange 
-          await User.create({ firstName: 'Pesho', lastName: 'Peshov', identityNumber: 123123 });
+          let user = await User.create({ firstName: 'Pesho', lastName: 'Peshov', identityNumber: 8212104507 });
           let session = await User.startSession();
 
-          //act
-          try {
-               await serviceContainer.userService.getOrCreateUser({ firstName: 'Gosho', lastName: 'Goshov', identityNumber: 123123 } as unknown as IUser, session);
-          } catch (ex) { 
-               //assert
-               expect(ex).to.be.an('error');
-          }
+          let userFromService = await serviceContainer.userService.getOrCreateUser({ firstName: 'Gosho', lastName: 'Goshov', identityNumber: 8212104507 } as unknown as IUser, session);
+          expect(user.identityNumber).to.be.equal(userFromService.identityNumber);
      });
 });
