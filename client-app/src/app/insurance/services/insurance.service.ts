@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import IInsuranceForm from 'src/app/interfaces/insurance/IInsuranceForm';
 import { environment } from 'src/environments/environment';
+import IInsuranceForm from '../models/IInsuranceForm';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,6 @@ export class InsuranceService {
   }
 
   public createInsurance(data: IInsuranceForm) {
-    return this.http.post<any>(this.url, data);
+    return this.http.post<IInsuranceForm>(this.url, data);
   }
-
-
 }
- 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InsuranceService } from 'src/app/services/insurance/insurance.service';
+import { InsuranceService } from '../services/insurance.service';
 
 @Component({
   selector: 'app-list',

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { InsuranceService } from 'src/app/services/insurance/insurance.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { plateNumberValidator } from 'src/app/shared/validators';
+import { InsuranceService } from '../services/insurance.service';
 
 @Component({
   selector: 'app-create-form',
@@ -55,7 +54,7 @@ export class CreateFormComponent {
     insurance: this.fb.group({
       startDate: [this.startDate, [Validators.required]],
       cost: [null, [Validators.required]],
-      dueAmount: [null, [Validators.required]],
+      dueAmount: [{value: null, disabled:true}, [Validators.required]],
       installmentType: ['', [Validators.required]]
     }),
     car: this.fb.group({
