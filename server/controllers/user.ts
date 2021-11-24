@@ -4,7 +4,8 @@ import { User } from '../models/user';
 
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
-        return res.send("good");
+        let users = await User.find({});
+        res.send(users);
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
         const requestModel = req.body as IUserCreate;

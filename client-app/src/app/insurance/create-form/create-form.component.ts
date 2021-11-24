@@ -4,33 +4,24 @@ import * as moment from 'moment';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { InsuranceService } from '../services/insurance.service';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/user/services/user.service';
+import { map, mergeMap, startWith } from 'rxjs/operators';
+import { Observable, pipe } from 'rxjs';
+import { IUser } from 'src/app/user/models/IUser';
 
 @Component({
   selector: 'app-create-form',
   templateUrl: './create-form.component.html',
   styleUrls: ['./create-form.component.css']
 })
-export class CreateFormComponent {
-  constructor(private router: Router, private fb: FormBuilder, private insuranceService: InsuranceService, private snackBar: MatSnackBar) {
+export class CreateFormComponent implements OnInit {
+  constructor(private router: Router,
+    private fb: FormBuilder,
+    private insuranceService: InsuranceService,
+    private userService: UserService,
+    private snackBar: MatSnackBar) {
+
     this.setEndDate(this.startDate);
-    this.createForm.get('insurance.startDate')?.valueChanges.subscribe((data) => {
-      this.setEndDate(data);
-    });
-
-    this.createForm.get('insurance.cost')?.valueChanges.subscribe((cost) => {
-      let installmentType = this.createForm.get('insurance.installmentType')?.value;
-      if (installmentType) {
-        this.setDueAmountValue(cost, installmentType)
-
-      }
-    });
-
-    this.createForm.get('insurance.installmentType')?.valueChanges.subscribe((installmentType) => {
-      let cost = this.createForm.get('insurance.cost')?.value;
-      if (cost) {
-        this.setDueAmountValue(cost, installmentType)
-      }
-    });
   }
 
   startDate = new Date();
@@ -51,11 +42,14 @@ export class CreateFormComponent {
     }
   ];
 
+  userIdentityNumberOptions: String[] = [];
+  userIdentityNumberFilteredOptions: Observable<any> | undefined;
+
   createForm = this.fb.group({
     insurance: this.fb.group({
       startDate: [this.startDate, [Validators.required]],
       cost: [null, [Validators.required]],
-      dueAmount: [{value: null, disabled:true}, [Validators.required]],
+      dueAmount: [{ value: null, disabled: true }, [Validators.required]],
       installmentType: ['', [Validators.required]]
     }),
     car: this.fb.group({
@@ -68,6 +62,34 @@ export class CreateFormComponent {
       identityNumber: ['', [Validators.required]]
     }),
   });
+
+  ngOnInit(): void {
+    this.userService.loadUsers().subscribe(users => {
+      this.userIdentityNumberOptions = users.map(x => x.identityNumber.toString());
+      this.userIdentityNumberFilteredOptions = this.createForm.get('owner.identityNumber')?.valueChanges.pipe(
+        startWith(''),
+        map((value) => this.filter(value))
+      );
+    })
+    this.addFormFieldHandlers();
+  }
+
+
+
+  onSubmit(): void {
+    this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
+      this.router.navigate([''])
+    }, err => {
+      this.showSnackbarTopPosition(err.error);
+    });
+  }
+
+  plateNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const isValid = /^(E|A|B|BT|BH|BP|EB|TX|K|KH|OB|M|PA|PK|EH|PB|PP|P|CC|CH|CO|C|CA|CB|CT|T|X|H|Y)(\d{4})([A|B|E|K|M|H|O|P|C|T|Y|X]{2})$/.test(control.value);
+      return isValid ? null : { pattern: { value: control.value } };
+    };
+  }
 
   private setEndDate(startDate: Date) {
     let newDate = moment(startDate).add(1, 'years').subtract(1, 'day').toDate();
@@ -88,27 +110,39 @@ export class CreateFormComponent {
     this.createForm.get('insurance.dueAmount')?.setValue(newAmount);
   }
 
-  onSubmit(): void {
-    this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
-      this.router.navigate([''])
-    }, err => {
-      this.showSnackbarTopPosition(err.error);
-    });
-  }
-
-  plateNumberValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const isValid = /^(E|A|B|BT|BH|BP|EB|TX|K|KH|OB|M|PA|PK|EH|PB|PP|P|CC|CH|CO|C|CA|CB|CT|T|X|H|Y)(\d{4})([A|B|E|K|M|H|O|P|C|T|Y|X]{2})$/.test(control.value);
-      return isValid ? null : { pattern: { value: control.value } };
-    };
-  }
-
-  private showSnackbarTopPosition(content:any) {
+  private showSnackbarTopPosition(content: any) {
     this.snackBar.open(content, '', {
       duration: 5000,
       verticalPosition: "top", // Allowed values are  'top' | 'bottom'
       horizontalPosition: "center", // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'
       panelClass: ['mat-toolbar', 'mat-warn']
     });
+  }
+
+  private addFormFieldHandlers() {
+    this.createForm.get('insurance.startDate')?.valueChanges.subscribe((data) => {
+      this.setEndDate(data);
+    });
+
+    this.createForm.get('insurance.cost')?.valueChanges.subscribe((cost) => {
+      let installmentType = this.createForm.get('insurance.installmentType')?.value;
+      if (installmentType) {
+        this.setDueAmountValue(cost, installmentType)
+
+      }
+    });
+
+    this.createForm.get('insurance.installmentType')?.valueChanges.subscribe((installmentType) => {
+      let cost = this.createForm.get('insurance.cost')?.value;
+      if (cost) {
+        this.setDueAmountValue(cost, installmentType)
+      }
+    });
+  };
+
+  private filter(value: string): String[] {
+    const filterValue = value.toLowerCase();
+
+    return this.userIdentityNumberOptions.filter(option => option.includes(filterValue));
   }
 }

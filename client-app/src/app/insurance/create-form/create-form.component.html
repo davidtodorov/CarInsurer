@@ -29,10 +29,13 @@
           <div class="col">
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Identity Number</mat-label>
-              <input matInput formControlName="identityNumber">
-              <mat-error *ngIf="createForm.get('owner.identityNumber')?.hasError('required')">
-                Identity Number is <strong>required</strong>
-              </mat-error>
+              <input type="text" matInput formControlName="identityNumber"
+                [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of userIdentityNumberFilteredOptions | async" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
           </div>
         </div>
