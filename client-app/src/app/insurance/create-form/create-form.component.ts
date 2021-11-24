@@ -3,19 +3,21 @@ import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators
 import * as moment from 'moment';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { InsuranceService } from '../services/insurance.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/user/services/user.service';
-import { map, mergeMap, startWith } from 'rxjs/operators';
+import { first, map, mergeMap, startWith } from 'rxjs/operators';
 import { Observable, pipe } from 'rxjs';
 import { IUser } from 'src/app/user/models/IUser';
+import IInsuranceForm from '../models/IInsuranceForm';
 
 @Component({
-  selector: 'app-create-form',
+  selector: 'app-insurance-create-form',
   templateUrl: './create-form.component.html',
   styleUrls: ['./create-form.component.css']
 })
 export class CreateFormComponent implements OnInit {
   constructor(private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private insuranceService: InsuranceService,
     private userService: UserService,
@@ -24,6 +26,8 @@ export class CreateFormComponent implements OnInit {
     this.setEndDate(this.startDate);
   }
 
+  id: string | undefined;
+  isAddMode: boolean = false;
   startDate = new Date();
   insuranceEndDate: Date | undefined;
 
@@ -42,7 +46,8 @@ export class CreateFormComponent implements OnInit {
     }
   ];
 
-  users: IUser[] | undefined;
+  users: IUser[] = [];
+  currentInsurance: IInsuranceForm | undefined;
   userIdentityNumberOptions: Number[] = [];
   userIdentityNumberFilteredOptions: Observable<any> | undefined;
 
@@ -65,23 +70,40 @@ export class CreateFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.userService.loadUsers().subscribe(users => {
-      this.users = users;
-      this.userIdentityNumberOptions = users.map(x => x.identityNumber);
-      this.userIdentityNumberFilteredOptions = this.createForm.get('owner.identityNumber')?.valueChanges.pipe(
-        startWith(''),
-        map((value) => this.filter(value))
-      );
-    })
+    this.id = this.route.snapshot.params['id'];
+    this.isAddMode = !this.id;
+
+    if (this.isAddMode) {
+      this.userService.loadUsers().subscribe(users => {
+        this.users = users;
+        this.userIdentityNumberOptions = users.map(x => x.identityNumber);
+        this.userIdentityNumberFilteredOptions = this.createForm.get('owner.identityNumber')?.valueChanges.pipe(
+          startWith(''),
+          map((value) => this.filter(value))
+        );
+      });
+    } else {
+      this.insuranceService.loadInsurances(this.id).subscribe(insurances => {
+        let insurance = insurances[0];
+        let owner = insurance.car.owner;
+        let car = insurance.car;
+        this.createForm.patchValue({
+          owner,
+          car,
+          insurance
+        })
+      })
+    }
+
     this.addFormFieldHandlers();
   }
 
   onSubmit(): void {
-    this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
-      this.router.navigate([''])
-    }, err => {
-      this.showSnackbarTopPosition(err.error);
-    });
+      this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
+        this.router.navigate([''])
+      }, err => {
+        this.showSnackbarTopPosition(err.error);
+      });
   }
 
   plateNumberValidator(): ValidatorFn {
@@ -162,5 +184,5 @@ export class CreateFormComponent implements OnInit {
     control?.disable();
     control?.setValue(value);
   }
-  
+
 }

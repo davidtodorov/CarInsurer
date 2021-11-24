@@ -5,11 +5,13 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../material/material.module';
 import { CreateFormComponent } from './create-form/create-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EditComponent } from './edit/edit.component';
 
 @NgModule({
   declarations: [
     ListComponent,
     CreateFormComponent,
+    EditComponent,
   ],
   imports: [
     CommonModule,
@@ -19,7 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   exports: [
     ListComponent,
-    CreateFormComponent
+    CreateFormComponent,
+    EditComponent
   ]
 })
 export class InsuranceModule { }

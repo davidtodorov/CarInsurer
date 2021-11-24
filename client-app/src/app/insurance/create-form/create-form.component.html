@@ -1,7 +1,7 @@
 <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
   <mat-card class="shipping-card">
     <mat-card-header>
-      <mat-card-title>Create Insurance</mat-card-title>
+      <mat-card-title>{{ isAddMode ? "Create Insurance" : ""}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <!-- OWNER -->
@@ -126,7 +126,7 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-actions *ngIf="isAddMode">
       <button mat-raised-button color="primary" type="submit" [disabled]="this.createForm.invalid">Submit</button>
     </mat-card-actions>
   </mat-card>
