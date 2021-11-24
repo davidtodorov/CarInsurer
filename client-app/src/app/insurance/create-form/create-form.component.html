@@ -10,6 +10,18 @@
         <div class="row">
           <div class="col">
             <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Identity Number</mat-label>
+              <input type="number" matInput formControlName="identityNumber" [matAutocomplete]="auto" (blur)="onIdentityNumberBlur($event)">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of userIdentityNumberFilteredOptions | async" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width" appearance="outline">
               <mat-label>First Name</mat-label>
               <input matInput formControlName="firstName">
               <mat-error *ngIf="createForm.get('owner.firstName')?.hasError('required')">
@@ -17,6 +29,7 @@
               </mat-error>
             </mat-form-field>
           </div>
+
           <div class="col">
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Last Name</mat-label>
@@ -24,18 +37,6 @@
               <mat-error *ngIf="createForm.get('owner.lastName')?.hasError('required')">
                 Last Name is <strong>required</strong>
               </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col">
-            <mat-form-field class="full-width" appearance="outline">
-              <mat-label>Identity Number</mat-label>
-              <input type="text" matInput formControlName="identityNumber"
-                [matAutocomplete]="auto">
-              <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let option of userIdentityNumberFilteredOptions | async" [value]="option">
-                  {{option}}
-                </mat-option>
-              </mat-autocomplete>
             </mat-form-field>
           </div>
         </div>
@@ -130,5 +131,3 @@
     </mat-card-actions>
   </mat-card>
 </form>
-
-{{ createForm.value | json }}

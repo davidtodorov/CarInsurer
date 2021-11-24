@@ -25,7 +25,7 @@ export class CreateFormComponent implements OnInit {
   }
 
   startDate = new Date();
-  insuranceEndDate: any;
+  insuranceEndDate: Date | undefined;
 
   installmentTypes = [
     {
@@ -42,7 +42,8 @@ export class CreateFormComponent implements OnInit {
     }
   ];
 
-  userIdentityNumberOptions: String[] = [];
+  users: IUser[] | undefined;
+  userIdentityNumberOptions: Number[] = [];
   userIdentityNumberFilteredOptions: Observable<any> | undefined;
 
   createForm = this.fb.group({
@@ -65,7 +66,8 @@ export class CreateFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.loadUsers().subscribe(users => {
-      this.userIdentityNumberOptions = users.map(x => x.identityNumber.toString());
+      this.users = users;
+      this.userIdentityNumberOptions = users.map(x => x.identityNumber);
       this.userIdentityNumberFilteredOptions = this.createForm.get('owner.identityNumber')?.valueChanges.pipe(
         startWith(''),
         map((value) => this.filter(value))
@@ -73,8 +75,6 @@ export class CreateFormComponent implements OnInit {
     })
     this.addFormFieldHandlers();
   }
-
-
 
   onSubmit(): void {
     this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
@@ -89,6 +89,18 @@ export class CreateFormComponent implements OnInit {
       const isValid = /^(E|A|B|BT|BH|BP|EB|TX|K|KH|OB|M|PA|PK|EH|PB|PP|P|CC|CH|CO|C|CA|CB|CT|T|X|H|Y)(\d{4})([A|B|E|K|M|H|O|P|C|T|Y|X]{2})$/.test(control.value);
       return isValid ? null : { pattern: { value: control.value } };
     };
+  }
+
+  onIdentityNumberBlur(event: FocusEvent) {
+    const value = this.createForm.get('owner.identityNumber')?.value
+    if (value && this.userIdentityNumberOptions.some(x => x === value)) {
+      let user = this.users?.find(x => x.identityNumber === value);
+      this.disableControlAndSetValue(this.createForm.get('owner.firstName'), user?.firstName)
+      this.disableControlAndSetValue(this.createForm.get('owner.lastName'), user?.lastName)
+    } else {
+      this.createForm.get('owner.firstName')?.enable();
+      this.createForm.get('owner.lastName')?.enable();
+    }
   }
 
   private setEndDate(startDate: Date) {
@@ -140,9 +152,15 @@ export class CreateFormComponent implements OnInit {
     });
   };
 
-  private filter(value: string): String[] {
-    const filterValue = value.toLowerCase();
+  private filter(value: string): Number[] {
+    const filterValue = value;
 
-    return this.userIdentityNumberOptions.filter(option => option.includes(filterValue));
+    return this.userIdentityNumberOptions.filter(option => option.toString().includes(filterValue));
   }
+
+  private disableControlAndSetValue(control: AbstractControl | null, value: String | undefined) {
+    control?.disable();
+    control?.setValue(value);
+  }
+  
 }
