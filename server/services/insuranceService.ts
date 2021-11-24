@@ -21,6 +21,19 @@ export default class InsuranceService {
         return new Insurance(insurance).save({ session });
     }
 
+    public async updateInsurance(model: IInsurance, session: ClientSession): Promise<IInsurance> {
+        model.startDate = this.getStartDate(model);
+
+        let insurance = new Insurance({
+            ...model,
+            endDate: this.getEndDate(model),
+            dueAmount: this.getDueAmount(model)
+        });
+
+        insurance.installments = await this.getInstallments(insurance, session);
+        return new Insurance(insurance).save({ session });
+    }
+
     private getDueAmount(model: IInsurance): number {
         let dueAmount = 0;
         if (model.installmentType === InstallmentType.Yearly) {

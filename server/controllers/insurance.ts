@@ -1,16 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import { app } from '..';
-import IInsuranceCreate from '../interfaces/insurance/IInsuranceCreate';
 import { Insurance } from '../models/insurance';
 import { IInsuraceWorkflow } from '../services/insuranceWorkflow';
 
 
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
-        const insurances = await Insurance.find().populate({
+        const { id } = req.query;
+        const insurances = await Insurance.find(id ? { _id: id } : {}).populate({
             path: 'car',
-            select: 'plateNumber',
             populate: {
                 path: 'owner'
             }
@@ -27,5 +26,8 @@ export default {
         });
 
         session.endSession();
+    },
+    put: async (req: Request, res: Response, next: NextFunction) => {
+        
     }
 }
