@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -15,7 +15,7 @@ import IInsuranceForm from '../models/IInsuranceForm';
   templateUrl: './create-form.component.html',
   styleUrls: ['./create-form.component.css']
 })
-export class CreateFormComponent implements OnInit {
+export class CreateFormComponent implements OnInit, OnChanges {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -25,6 +25,7 @@ export class CreateFormComponent implements OnInit {
 
     this.setEndDate(this.startDate);
   }
+
 
   id: string | undefined;
   isAddMode: boolean = false;
@@ -47,7 +48,7 @@ export class CreateFormComponent implements OnInit {
   ];
 
   users: IUser[] = [];
-  currentInsurance: IInsuranceForm | undefined;
+  //currentInsurance: IInsuranceForm | undefined;
   userIdentityNumberOptions: Number[] = [];
   userIdentityNumberFilteredOptions: Observable<any> | undefined;
 
@@ -69,6 +70,8 @@ export class CreateFormComponent implements OnInit {
     }),
   });
 
+  @Input() currentInsurance: any;
+
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
@@ -83,27 +86,51 @@ export class CreateFormComponent implements OnInit {
         );
       });
     } else {
-      this.insuranceService.loadInsurances(this.id).subscribe(insurances => {
-        let insurance = insurances[0];
-        let owner = insurance.car.owner;
-        let car = insurance.car;
-        this.createForm.patchValue({
-          owner,
-          car,
-          insurance
-        })
-      })
+      // this.currentInsurance
+
+      // let insurance = this.currentInsurance;
+      // let owner = insurance.car.owner;
+      // let car = insurance.car;
+      // this.createForm.patchValue({
+      //   owner,
+      //   car,
+      //   insurance
+      // });
+      // this.insuranceService.loadInsurances(this.id).subscribe(insurances => {
+      //   let insurance = insurances[0];
+      //   let owner = insurance.car.owner;
+      //   let car = insurance.car;
+      //   this.createForm.patchValue({
+      //     owner,
+      //     car,
+      //     insurance
+      //   })
+      // })
     }
 
     this.addFormFieldHandlers();
   }
 
-  onSubmit(): void {
-      this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
-        this.router.navigate([''])
-      }, err => {
-        this.showSnackbarTopPosition(err.error);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.currentInsurance.currentValue) {
+      let insurance = changes.currentInsurance.currentValue;
+      let owner = insurance.car.owner;
+      let car = insurance.car;
+
+      this.createForm.patchValue({
+        owner,
+        car,
+        insurance
       });
+    }
+  }
+
+  onSubmit(): void {
+    this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
+      this.router.navigate([''])
+    }, err => {
+      this.showSnackbarTopPosition(err.error);
+    });
   }
 
   plateNumberValidator(): ValidatorFn {
@@ -186,3 +213,4 @@ export class CreateFormComponent implements OnInit {
   }
 
 }
+

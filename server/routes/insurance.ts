@@ -1,5 +1,5 @@
 import controllers from '../controllers'
-import app, { Request, Response, NextFunction, RequestHandler} from 'express';
+import app, { Request, Response, NextFunction, RequestHandler } from 'express';
 import { handlePromiseErrors } from './errorHandlingRouter';
 
 const router = app.Router();

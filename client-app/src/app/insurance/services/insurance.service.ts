@@ -11,8 +11,11 @@ export class InsuranceService {
 
   private url = environment.apiBaseUrl + '/insurances';
 
-  public loadInsurances(id?: string) {
-    let url = id ? `${this.url}/${id}` : this.url;
+  public loadInsurances(id?: string, expanded: boolean = false) {
+    let url = id ? `${this.url}/?${id}` : this.url;
+    if (id && expanded) {
+      url+= '&expanded=true'
+    }
     return this.http.get<any[]>(url);
   }
 

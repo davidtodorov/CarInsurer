@@ -1,0 +1,33 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="startDate">
+        <th mat-header-cell *matHeaderCellDef> Start Date </th>
+        <td mat-cell *matCellDef="let element"> {{ element.startDate | date }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endDate">
+        <th mat-header-cell *matHeaderCellDef> End Date </th>
+        <td mat-cell *matCellDef="let element"> {{ element.endDate | date }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="isPaid">
+        <th mat-header-cell *matHeaderCellDef> Is Paid </th>
+        <td mat-cell *matCellDef="let element"> {{ element.isPaid ? "Yes" : "No" }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Mark as </th>
+        <td mat-cell *matCellDef="let element">
+            <div class="actionButtonsContainer">
+                <button class="md-small" mat-flat-button color="warn">Unpaid</button>
+                <button mat-flat-button color="primary" (click)="onPaidClick(element)">Paid</button>
+            </div>
+
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

@@ -14,7 +14,7 @@ export interface IInstallment {
 const schema = new Schema<IInstallment>({
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
-    isPaid: { type: Boolean },
+    isPaid: { type: Boolean, required: true, default: false },
     insurance: {
         type: ObjectId,
         ref: 'Insurance',
