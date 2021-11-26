@@ -8,5 +8,7 @@ export default (app: express.Application) => {
 
     app.use('/api/cars', routes.car);
 
+    app.use('/api/installments', routes.installment)
+
     app.use('*', (req, res, next) => res.send('<h1> Wrong route maybe? </h1>'));
 };

@@ -21,13 +21,19 @@
         <th mat-header-cell *matHeaderCellDef> Mark as </th>
         <td mat-cell *matCellDef="let element">
             <div class="actionButtonsContainer">
-                <button class="md-small" mat-flat-button color="warn">Unpaid</button>
-                <button mat-flat-button color="primary" (click)="onPaidClick(element)">Paid</button>
+                <ng-container *ngTemplateOutlet="element.isPaid ? unpaid : paid; context: {element}"></ng-container>
             </div>
-
         </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<ng-template #unpaid let-installment="element">
+    <button class="md-small" mat-flat-button color="warn" (click)="onUnpaidClick(installment)">Unpaid</button>
+</ng-template>
+
+<ng-template #paid let-installment="element">
+    <button mat-flat-button color="primary" (click)="onPaidClick(installment)">Paid</button>
+</ng-template>

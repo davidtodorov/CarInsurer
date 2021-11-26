@@ -7,9 +7,8 @@ import { IInsuraceWorkflow } from '../services/insuranceWorkflow';
 
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
-
-        const { id } = req.query;
-        const expanded: Boolean =  !!req.query.expanded;
+        const { id } = req.params;
+        const extended =  req.query.extended;
         const query = Insurance.find(id ? { _id: id } : {}).populate({
             path: 'car',
             populate: {
@@ -17,7 +16,7 @@ export default {
             }
         });
 
-        if (expanded === true) {
+        if (extended === "true") {
             query.populate('installments')
         }
         let insurances = await query.exec();
