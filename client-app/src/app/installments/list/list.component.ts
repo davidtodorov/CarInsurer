@@ -25,19 +25,19 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   onPaidClick(installment: any) {
-    installment.isPaid = true;
-    this.installmentsService.updateInstallment(installment).subscribe(() => {
-      let index = this.dataSource.findIndex(x => x._id === installment._id);
-      this.dataSource[index].isPaid = true;
-    });
+    this.paidOrUnpaid(installment, true);
   }
 
   onUnpaidClick(installment: any) {
-    installment.isPaid = false;
-    this.installmentsService.updateInstallment(installment).subscribe(() => {
-      let index = this.dataSource.find(x => x._id === installment._id);
-      this.dataSource[index].isPaid = false;
-    });
+    this.paidOrUnpaid(installment, false);
   }
 
+
+  private paidOrUnpaid(installment: any, flag: boolean) {
+    installment.isPaid = flag;
+    this.installmentsService.updateInstallment(installment).subscribe(() => {
+      let index = this.dataSource.find(x => x._id === installment._id);
+      this.dataSource[index].isPaid = flag;
+    });
+  }
 }
