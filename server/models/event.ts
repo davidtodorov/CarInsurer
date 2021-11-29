@@ -4,22 +4,22 @@ import { IInsurance } from './insurance';
 
 const { String, Date, ObjectId, Buffer } = Schema.Types;
 
-export interface IEvent {
+export interface IInsuranceEvent {
     _id: String,
     date: Date;
     description: String;
     car: ICar['id'];
-    image: String
+    images: String[]
 
 }
-const schema = new Schema<IEvent>({
-    date: { type: Date },
-    description: { type: String },
+const schema = new Schema<IInsuranceEvent>({
+    date: { type: Date, required: true },
+    description: { type: String, required: true },
     car: {
         type: ObjectId,
-        ref: 'Car'
-        
+        ref: 'Car',
+        required: true
     },
-    image: { type: String }
+    images: [{ type: String, required: true }]
 });
-export const Evenet = model<IEvent>('Event', schema);
+export const InsuranceEvent = model<IInsuranceEvent>('InsuranceEvent', schema);

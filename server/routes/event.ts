@@ -25,7 +25,7 @@ let storage = multer.diskStorage({
 
 let upload = multer({ storage });
 
-router.post('/', upload.single('file') ,handlePromiseErrors(controllers.events.post));
+router.post('/', upload.array('file') ,handlePromiseErrors(controllers.events.post));
 
 export default router;
 

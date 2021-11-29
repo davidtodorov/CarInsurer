@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import mongoose, { ClientSession } from 'mongoose';
 import routes from './config/routes';
 import { ServiceContainer } from './services';
+import path from 'path';
 
 // require('dotenv').config({ path: __dirname+'/.env' });
 
@@ -26,6 +27,8 @@ export const app: express.Application = express();
 
 mongoose.connect("mongodb://WS460:27017,WS460:27018,WS460:27019/car-insurer?replicaSet=rs").then(async (db) => {
     app.serviceContainer = new ServiceContainer();
+    
+    app.use('/static', express.static(path.join(__dirname, 'public')));
 
     app.use(cors({
         origin: 'http://localhost:4200'
