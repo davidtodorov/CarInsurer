@@ -4,10 +4,9 @@ import { Car, ICar } from '../models/car';
 
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
-        let cars = await Car.find({});
-        let car = await Car.findOne().populate('owner');
-        console.log(car);
-        return res.send(car);
+        const { id } = req.params;
+        let cars = await Car.find(id ? { _id: id } : {});
+        return res.send(cars);
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
         const requestModel = req.body as ICar;

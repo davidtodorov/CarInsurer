@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
 import { InstallmentsModule } from '../installments/installments.module';
 import { ListComponent as InstallmentsListComponent} from '../installments/list/list.component';
+import { EventsModule } from '../events/events.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ListComponent as InstallmentsListComponent} from '../installments/list/
     RouterModule,
     MaterialModule,
     ReactiveFormsModule,
-    InstallmentsModule
+    InstallmentsModule,
+    EventsModule
   ],
   exports: [
     InsuranceListComponent,

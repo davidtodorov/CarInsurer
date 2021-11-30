@@ -5,8 +5,16 @@ import { User } from '../models/user';
 
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
-        // let users = await User.find({});
-        // res.send(users);
+        const { id } = req.params;
+        const events = await InsuranceEvent.find(id ? { _id: id } : {}).populate({
+            path: 'car',
+            select: 'plateNumber',
+            populate: {
+                path: 'owner',
+                select: 'firstName lastName'
+            }
+        });
+        res.send(events);
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
         let files = req.files as any;

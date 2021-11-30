@@ -1,25 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavComponent } from './nav/nav.component';
-
+import { ListComponent } from './list/list.component';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
-import { InsuranceModule } from '../insurance/insurance.module';
-import { EventsModule } from '../events/events.module';
+import { InstallmentsModule } from '../installments/installments.module';
 
 
 
 @NgModule({
   declarations: [
-    NavComponent
+    ListComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     MaterialModule,
-    InsuranceModule,
-    EventsModule
-  ],
-  exports: [NavComponent]
+    ReactiveFormsModule,
+  ]
 })
-export class CoreModule { }
+export class EventsModule { }

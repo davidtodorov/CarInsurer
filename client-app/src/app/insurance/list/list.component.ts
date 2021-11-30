@@ -7,10 +7,10 @@ import { InsuranceService } from '../services/insurance.service';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-  public insurances: any[] = [];
-
-  public displayedColumns: string[] = ['owner', 'plateNumber', 'startDate', 'endDate', 'cost', 'dueAmount', 'actions']
   constructor(private insuranceService: InsuranceService) { }
+  
+  public insurances: any[] = [];
+  public displayedColumns: string[] = ['owner', 'plateNumber', 'startDate', 'endDate', 'cost', 'dueAmount', 'actions']
 
   ngOnInit(): void {
     this.insuranceService.loadInsurances().subscribe(insuranes => {

@@ -7,9 +7,14 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: ghostwhite;;
+  background-color: ghostwhite;
 }
 
 .spacer {
   flex: 1 1 auto;
+}
+
+.tableToolbar {
+  display: flex;
+  align-items: baseline;
 }
