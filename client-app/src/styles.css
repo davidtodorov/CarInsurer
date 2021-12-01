@@ -16,5 +16,10 @@ body {
 
 .tableToolbar {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.tableToolbar > * {
+  margin:0 !important;
 }

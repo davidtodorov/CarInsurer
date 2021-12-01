@@ -5,7 +5,11 @@ import { Car, ICar } from '../models/car';
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        let cars = await Car.find(id ? { _id: id } : {});
+        let cars = await Car.find(id ? { _id: id } : {})
+        .populate({
+            path: 'owner',
+            select: 'firstName lastName'
+        });
         return res.send(cars);
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
