@@ -1,6 +1,7 @@
 <app-events-create-edit-form [currentEvent]="currentEvent"></app-events-create-edit-form>
 
 <ng-container *ngIf="uploadedImages.length !== 0">
+    <h3>Uploaded: </h3>
     <carousel [cellsToShow]="1" [height]="350">
       <ng-container *ngFor="let img of uploadedImages">
         <div class="carousel-cell">

@@ -19,4 +19,8 @@ export class EventService {
   createEvent(data: any) {
     return this.http.post(this.url, data);
   }
+
+  updateEvenet(data: any) {
+    return this.http.put(this.url, data);
+  }
 }

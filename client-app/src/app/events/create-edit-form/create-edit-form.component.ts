@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InsuranceService } from 'src/app/insurance/services/insurance.service';
@@ -11,9 +11,6 @@ import { EventService } from '../services/event.service';
 })
 
 export class CreateEditFormComponent implements OnInit, OnChanges {
-  @ViewChild('firstName') firstNameInput!: ElementRef<HTMLElement>;
-  @ViewChild('lastName') lastNameInput!: ElementRef<HTMLElement>;
-
   constructor(private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -28,6 +25,10 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   isAddMode: boolean = false;
 
   eventForm = this.fb.group({
+    owner: this.fb.group({
+      firstName: [{ value: null, disabled: true }],
+      lastName: [{ value: null, disabled: true }],
+    }),
     insurance: [null, [Validators.required]],
     date: [null, [Validators.required]],
     description: [null, [Validators.required]],
@@ -38,9 +39,6 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   insuranceOptions: any[] = [];
   addedImages: any[] = [];
   fileNames: string[] = [];
-
-  firstName = '';
-  lastName = '';
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
@@ -56,8 +54,9 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
     if (this.isAddMode) {
       this.eventForm.get('insurance')?.valueChanges.subscribe(id => {
         let insurance = this.insurances.find(x => x._id === id);
-        this.firstName = insurance.car.owner.firstName;
-        this.lastName = insurance.car.owner.lastName;
+        this.eventForm.patchValue({
+          owner: insurance.car.owner
+        })
       });
     }
   }
@@ -65,17 +64,17 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const event = changes.currentEvent.currentValue
     if (event) {
-      this.firstName = event.insurance.car.owner.firstName;
-      this.lastName = event.insurance.car.owner.lastName;
       this.eventForm.patchValue({
         insurance: event.insurance._id,
         date: event.date,
-        description: event.description
+        description: event.description,
+        owner: event.insurance.car.owner
       });
     }
   }
 
   onSubmit(): void {
+    // this.submitHandler.emit(this.eventForm.value);
     let formData = new FormData();
     for (const file of this.eventForm.get('files')?.value) {
       formData.append('file', file);
@@ -86,6 +85,7 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
         formData.append(key, element)
       }
     }
+
     this.eventService.createEvent(formData).subscribe();
   }
 
@@ -102,7 +102,7 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-          this.addedImages.push({ path: reader.result as string})
+          this.addedImages.push({ path: reader.result as string })
         };
       }
     }

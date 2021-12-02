@@ -1,14 +1,14 @@
 <form [formGroup]="eventForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="shipping-card">
     <mat-card-header>
-      <mat-card-title>Create Event</mat-card-title>
+      <mat-card-title>{{ isAddMode ? "Create " : "Edit " }}Event</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width" appearance="outline">
             <mat-label>Insurance</mat-label>
-            <mat-select formControlName="insurance">
+            <mat-select formControlName="insurance" [disabled]="!isAddMode">
               <mat-option *ngFor="let insurance of insuranceOptions" [value]="insurance.value">
                 {{insurance.text}}
               </mat-option>
@@ -19,16 +19,20 @@
           </mat-form-field>
         </div>
         <div class="col">
-          <mat-form-field class="full-width" appearance="outline">
-            <mat-label>First Name</mat-label>
-            <input matInput readonly [value]="firstName">
-          </mat-form-field>
+          <div formGroupName="owner" class="form-group">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName">
+            </mat-form-field>
+          </div>
         </div>
         <div class="col">
-          <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Last Name</mat-label>
-            <input matInput readonly [value]="lastName">
-          </mat-form-field>
+          <div formGroupName="owner" class="form-group">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName">
+            </mat-form-field>
+          </div>
         </div>
       </div>
 
@@ -51,21 +55,16 @@
             </mat-error>
           </mat-form-field>
 
-          <ng-container *ngIf="isAddMode">
-            <mat-form-field style="width: calc(100% - 60px); margin-right: 20px;" appearance="outline">
-              <mat-label>Files</mat-label>
-              <input matInput disabled [value]="fileNames.join(', ')">
-            </mat-form-field>
-            <input multiple type="file" (change)="uploadFiles($event)" #fileInput hidden />
-            <button mat-mini-fab type="button" color="primary" (click)="fileInput.click()">
-              <mat-icon> local_see </mat-icon>
-            </button>
-          </ng-container>
+          <mat-form-field style="width: calc(100% - 60px); margin-right: 20px;" appearance="outline">
+            <mat-label>Files</mat-label>
+            <input matInput disabled [value]="fileNames.join(', ')">
+          </mat-form-field>
+          <input multiple type="file" (change)="uploadFiles($event)" #fileInput hidden />
+          <button mat-mini-fab type="button" color="primary" (click)="fileInput.click()">
+            <mat-icon> local_see </mat-icon>
+          </button>
         </div>
-
       </div>
-
-
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" type="submit" [disabled]="this.eventForm.invalid">Submit</button>
@@ -74,6 +73,7 @@
 </form>
 
 <ng-container *ngIf="addedImages.length !== 0">
+  <h3>New Uploads:</h3>
   <carousel [cellsToShow]="1" [height]="350">
     <ng-container *ngFor="let img of addedImages">
       <div class="carousel-cell">
