@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { CreateEditFormComponent } from './create-edit-form/create-edit-form.component';
 import { DetailComponent } from './detail/detail.component';
+import { IvyCarouselModule } from 'angular-responsive-carousel';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { DetailComponent } from './detail/detail.component';
     RouterModule,
     MaterialModule,
     ReactiveFormsModule,
+    IvyCarouselModule
   ],
   exports: [
     CreateEditFormComponent,

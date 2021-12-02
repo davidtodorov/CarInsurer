@@ -16,8 +16,8 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder, 
-    private carService: CarService, 
+    private fb: FormBuilder,
+    private carService: CarService,
     private eventService: EventService) {
 
   }
@@ -36,6 +36,8 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
 
   cars: any[] = [];
   carOptions: any[] = [];
+  addedImages: any[] = [];
+  fileNames: string[] = [];
 
   firstName = '';
   lastName = '';
@@ -44,20 +46,20 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
 
-      this.carService.loadInsurances().subscribe(data => {
-        this.cars = data;
-        this.carOptions = data.map(x => {
-          return { text: x.plateNumber, value: x._id };
-        });
+    this.carService.loadInsurances().subscribe(data => {
+      this.cars = data;
+      this.carOptions = data.map(x => {
+        return { text: x.plateNumber, value: x._id };
       });
-  
-      if (this.isAddMode) {
-        this.eventForm.get('car')?.valueChanges.subscribe(carId => {
-          let car = this.cars.find(x => x._id === carId);
-          this.firstName = car.owner.firstName;
-          this.lastName = car.owner.lastName;
-        });
-      }
+    });
+
+    if (this.isAddMode) {
+      this.eventForm.get('car')?.valueChanges.subscribe(carId => {
+        let car = this.cars.find(x => x._id === carId);
+        this.firstName = car.owner.firstName;
+        this.lastName = car.owner.lastName;
+      });
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -88,11 +90,22 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   }
 
   uploadFiles(event: any) {
-    let files = (event.target as HTMLInputElement).files;
+    let files = (event.target as HTMLInputElement).files as any;
     this.eventForm.patchValue({
       files: files
-    })
-  }
+    });
 
+    if (files && files.length > 0) {
+      for (const file of files) {
+        this.fileNames.push(file.name);
+
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.addedImages.push({ path: reader.result as string})
+        };
+      }
+    }
+  }
 
 }
