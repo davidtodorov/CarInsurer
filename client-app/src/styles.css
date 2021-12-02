@@ -27,3 +27,11 @@ body {
 .mat-column-actions {
   width: 100px !important;
 }
+
+.warningColor {
+  background: rgb(255, 120, 120) !important;
+}
+
+simple-snack-bar > div > button {
+  background: white !important;
+}

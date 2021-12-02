@@ -16,14 +16,10 @@ const schema = new Schema<IInsuranceEvent>({
     date: { type: Date, required: true },
     description: { type: String, required: true },
     images: [{ type: String }],
-    car: {
-        type: ObjectId,
-        ref: 'Car',
-        required: true
-    },
     insurance: {
         type: ObjectId,
         ref: 'Insurance',
+        required: true
     }
 });
 

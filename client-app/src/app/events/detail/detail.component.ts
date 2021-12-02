@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { EventService } from '../services/event.service';
 
 @Component({
@@ -12,11 +13,16 @@ export class DetailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private eventService: EventService,) { }
 
   currentEvent: any;
+  uploadedImages: any[] = []
 
   ngOnInit(): void {
     let id =  this.route.snapshot.params['id'];
     this.eventService.loadEvents(id).subscribe(events => {
       this.currentEvent = events[0];
+
+      this.currentEvent.images.forEach((imageUrl: any) => {
+        this.uploadedImages.push({path: environment.uploadsBaseUrl + '/' + imageUrl})
+      });
     })
   }
 

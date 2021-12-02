@@ -10,7 +10,7 @@ export class CarService {
 
   private url = environment.apiBaseUrl + '/cars';
 
-  public loadInsurances(id?: string, extended: boolean = false) {
+  public loadCars(id?: string, extended: boolean = false) {
     let url = id ? `${this.url}/${id}` : this.url;
     return this.http.get<any[]>(url);
   }

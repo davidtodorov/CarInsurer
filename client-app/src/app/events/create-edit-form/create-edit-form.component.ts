@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CarService } from 'src/app/cars/car.service';
+import { InsuranceService } from 'src/app/insurance/services/insurance.service';
 import { EventService } from '../services/event.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private carService: CarService,
+    private insuranceService: InsuranceService,
     private eventService: EventService) {
 
   }
@@ -28,14 +28,14 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   isAddMode: boolean = false;
 
   eventForm = this.fb.group({
-    car: [null, [Validators.required]],
+    insurance: [null, [Validators.required]],
     date: [null, [Validators.required]],
     description: [null, [Validators.required]],
     files: [null]
   });
 
-  cars: any[] = [];
-  carOptions: any[] = [];
+  insurances: any[] = [];
+  insuranceOptions: any[] = [];
   addedImages: any[] = [];
   fileNames: string[] = [];
 
@@ -46,18 +46,18 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
 
-    this.carService.loadInsurances().subscribe(data => {
-      this.cars = data;
-      this.carOptions = data.map(x => {
-        return { text: x.plateNumber, value: x._id };
+    this.insuranceService.loadInsurances().subscribe(data => {
+      this.insurances = data;
+      this.insuranceOptions = data.map(x => {
+        return { text: x.car.plateNumber, value: x._id };
       });
     });
 
     if (this.isAddMode) {
-      this.eventForm.get('car')?.valueChanges.subscribe(carId => {
-        let car = this.cars.find(x => x._id === carId);
-        this.firstName = car.owner.firstName;
-        this.lastName = car.owner.lastName;
+      this.eventForm.get('insurance')?.valueChanges.subscribe(id => {
+        let insurance = this.insurances.find(x => x._id === id);
+        this.firstName = insurance.car.owner.firstName;
+        this.lastName = insurance.car.owner.lastName;
       });
     }
   }
@@ -65,10 +65,10 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const event = changes.currentEvent.currentValue
     if (event) {
-      this.firstName = event.car.owner.firstName;
-      this.lastName = event.car.owner.lastName;
+      this.firstName = event.insurance.car.owner.firstName;
+      this.lastName = event.insurance.car.owner.lastName;
       this.eventForm.patchValue({
-        car: event.car._id,
+        insurance: event.insurance._id,
         date: event.date,
         description: event.description
       });

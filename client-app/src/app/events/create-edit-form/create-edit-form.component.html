@@ -7,14 +7,14 @@
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Car</mat-label>
-            <mat-select formControlName="car">
-              <mat-option *ngFor="let car of carOptions" [value]="car.value">
-                {{car.text}}
+            <mat-label>Insurance</mat-label>
+            <mat-select formControlName="insurance">
+              <mat-option *ngFor="let insurance of insuranceOptions" [value]="insurance.value">
+                {{insurance.text}}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="eventForm.get('car')?.hasError('required')">
-              Car is <strong>required</strong>
+              Insurance is <strong>required</strong>
             </mat-error>
           </mat-form-field>
         </div>
@@ -62,7 +62,7 @@
             </button>
           </ng-container>
         </div>
-        
+
       </div>
 
 
@@ -73,10 +73,12 @@
   </mat-card>
 </form>
 
-<carousel [cellsToShow]="1" [height]="350">
-  <ng-container *ngFor="let img of addedImages">
-    <div class="carousel-cell">
-      <img [src]="img.path" alt="">
-    </div>
-  </ng-container>
-</carousel>
+<ng-container *ngIf="addedImages.length !== 0">
+  <carousel [cellsToShow]="1" [height]="350">
+    <ng-container *ngFor="let img of addedImages">
+      <div class="carousel-cell">
+        <img [src]="img.path" alt="">
+      </div>
+    </ng-container>
+  </carousel>
+</ng-container>
