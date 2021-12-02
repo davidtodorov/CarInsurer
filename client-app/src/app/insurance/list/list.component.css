@@ -11,3 +11,7 @@ mat-divider{
     display: inline-block;
     margin: 0 10px;
 }
+
+.mat-column-owner {
+    width: 170px
+}

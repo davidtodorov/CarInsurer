@@ -23,3 +23,7 @@ body {
 .tableToolbar > * {
   margin:0 !important;
 }
+
+.mat-column-actions {
+  width: 100px !important;
+}

@@ -35,9 +35,6 @@ export class ListComponent implements OnInit, OnChanges {
 
   private paidOrUnpaid(installment: any, flag: boolean) {
     installment.isPaid = flag;
-    this.installmentsService.updateInstallment(installment).subscribe(() => {
-      let index = this.dataSource.find(x => x._id === installment._id);
-      this.dataSource[index].isPaid = flag;
-    });
+    this.installmentsService.updateInstallment(installment).subscribe();
   }
 }

@@ -1,6 +1,6 @@
 table {
   width: 100%;
-  margin-top:20px;
+  margin-top: 20px;
 }
 
 .full-width {
@@ -27,10 +27,6 @@ table {
   margin-right: 20px;
 }
 
- table th:last-child, table td:last-child {
-    width: 160px;
-}
-
-.actionButtonsContainer button{
-    margin-right: 10px;
+.actionButtonsContainer button {
+  margin-right: 10px;
 }

@@ -1,4 +1,10 @@
-<button id="createButton" mat-raised-button color="primary" routerLink="/insurances/create">Create new</button>
+<div class="tableToolbar">
+    <h1>{{"Insurances" | uppercase }}</h1>
+    <span class="spacer"></span>
+    <button id="createButton" mat-raised-button color="primary" routerLink="/insurances/create">Create new</button>
+</div>
+
+
 
 
 <table mat-table [dataSource]="insurances" class="mat-elevation-z8">
