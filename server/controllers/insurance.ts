@@ -17,7 +17,13 @@ export default {
         });
 
         if (extended === "true") {
-            query.populate('installments')
+            query
+                .populate('installments')
+                .populate({
+                    path: 'events',
+                    select: 'date description images'
+                })
+
         }
         let insurances = await query.exec();
         return res.send(insurances);

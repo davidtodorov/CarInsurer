@@ -5,11 +5,13 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { CreateEditFormComponent } from './create-edit-form/create-edit-form.component';
+import { DetailComponent } from './detail/detail.component';
 
 @NgModule({
   declarations: [
     ListComponent,
     CreateEditFormComponent,
+    DetailComponent,
   ],
   imports: [
     CommonModule,
@@ -19,7 +21,8 @@ import { CreateEditFormComponent } from './create-edit-form/create-edit-form.com
   ],
   exports: [
     CreateEditFormComponent,
-    ListComponent
+    ListComponent,
+    DetailComponent
   ]
 })
 export class EventsModule { }

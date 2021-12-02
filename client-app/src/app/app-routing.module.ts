@@ -5,6 +5,7 @@ import { EditComponent } from './insurance/edit/edit.component';
 import { ListComponent } from './insurance/list/list.component';
 import  { ListComponent as EventListComponent } from './events/list/list.component'
 import { CreateEditFormComponent } from './events/create-edit-form/create-edit-form.component';
+import { DetailComponent as EventDetailComponent} from './events/detail/detail.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'events/create',
     component: CreateEditFormComponent
+  },
+  {
+    path: 'events/:id',
+    component: EventDetailComponent
   }
 ];
 

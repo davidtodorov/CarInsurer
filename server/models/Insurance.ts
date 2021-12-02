@@ -1,6 +1,7 @@
 const moment = require('moment');
-import { Schema, model, ObjectId, Document } from 'mongoose';
+import { Schema, model, ObjectId } from 'mongoose';
 import { ICar } from './car';
+import { IInsuranceEvent } from './event';
 import { IInstallment, Installment } from './installment';
 
 const { String, Number, Date, ObjectId } = Schema.Types;
@@ -20,8 +21,9 @@ export interface IInsurance {
     installmentType: String;
     installments: IInstallment['id'][];
     car: ICar['id'];
-
+    events: IInsuranceEvent['_id'][];
 }
+
 const insuranceSchema = new Schema<IInsurance>({
     startDate: { type: Date, required: true },
     endDate: { type: Date },
@@ -38,6 +40,10 @@ const insuranceSchema = new Schema<IInsurance>({
 
     }],
     car: { type: ObjectId, ref: 'Car', required: [true, "Car is required!"] },
+    events: [{
+        type: ObjectId,
+        ref: 'InsuranceEvent'
+    }]
 });
 
 export const Insurance = model<IInsurance>('Insurance', insuranceSchema);
