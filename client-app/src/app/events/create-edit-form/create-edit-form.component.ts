@@ -86,7 +86,9 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
       }
     }
 
-    this.eventService.createEvent(formData).subscribe();
+    this.eventService.createEvent(formData).subscribe(() => {
+      this.router.navigate(['/events'])
+    });
   }
 
   uploadFiles(event: any) {
