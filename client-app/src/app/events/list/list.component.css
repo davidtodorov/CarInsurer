@@ -1,8 +1,18 @@
 table {
-    width: 100%;
-    margin-top: 20px;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .mat-column-owner {
-    width: 200px
+  width: 200px;
+}
+
+.searchBar {
+  flex: 1 1 auto;
+}
+
+::ng-deep .searchBar > div {
+  width: 100%;
+  padding: 0 15px !important;
+  box-sizing: border-box;
 }

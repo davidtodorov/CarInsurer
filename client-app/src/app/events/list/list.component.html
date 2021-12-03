@@ -1,6 +1,9 @@
 <div class="tableToolbar">
     <h1>{{"Events" | uppercase }}</h1>
-    <span class="spacer"></span>
+    <mat-form-field class="searchBar" appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput type="text" (keyup)="applyFilter($event)">
+    </mat-form-field>
     <button id="createButton" mat-raised-button color="primary" routerLink="/events/create">Create new</button>
 </div>
 

@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { InsuranceService } from '../services/insurance.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-insurance-list',
