@@ -1,41 +1,43 @@
 <div class="tableToolbar">
     <h1>{{"Insurances" | uppercase }}</h1>
-    <span class="spacer"></span>
+    <mat-form-field class="searchBar" appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput type="text" (keyup)="doFilter($event)">
+    </mat-form-field>
     <button id="createButton" mat-raised-button color="primary" routerLink="/insurances/create">Create new</button>
 </div>
 
 
 
-
-<table mat-table [dataSource]="insurances" class="mat-elevation-z8">
+<table mat-table matSort [dataSource]="insurances" class="mat-elevation-z8">
     <ng-container matColumnDef="owner">
-        <th mat-header-cell *matHeaderCellDef> Owner </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Owner </th>
         <td mat-cell *matCellDef="let element"> {{ element.car.owner.firstName + ' ' + element.car.owner.lastName}}
         </td>
     </ng-container>
 
     <ng-container matColumnDef="plateNumber">
-        <th mat-header-cell *matHeaderCellDef> Plate Number </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Plate Number </th>
         <td mat-cell *matCellDef="let element"> {{element.car.plateNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="startDate">
-        <th mat-header-cell *matHeaderCellDef> Start Date </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
         <td mat-cell *matCellDef="let element"> {{element.startDate | date}} </td>
     </ng-container>
 
     <ng-container matColumnDef="endDate">
-        <th mat-header-cell *matHeaderCellDef> End Date </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
         <td mat-cell *matCellDef="let element"> {{element.endDate | date}} </td>
     </ng-container>
 
     <ng-container matColumnDef="cost">
-        <th mat-header-cell *matHeaderCellDef> Cost </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Cost </th>
         <td mat-cell *matCellDef="let element"> {{element.cost}} </td>
     </ng-container>
 
     <ng-container matColumnDef="dueAmount">
-        <th mat-header-cell *matHeaderCellDef> DueAmount </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> DueAmount </th>
         <td mat-cell *matCellDef="let element"> {{element.dueAmount}} </td>
     </ng-container>
 

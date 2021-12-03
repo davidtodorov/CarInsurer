@@ -15,3 +15,13 @@ mat-divider{
 .mat-column-owner {
     width: 170px
 }
+
+.searchBar {
+    flex: 1 1 auto;
+}
+
+::ng-deep .searchBar > div {
+    width: 100%;
+    padding: 0 15px !important;
+    box-sizing: border-box;
+}
