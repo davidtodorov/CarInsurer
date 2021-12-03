@@ -59,8 +59,8 @@ export default class InsuranceService {
         return endDate;
     }
 
-    private async getInstallments(insurance: IInsurance, session: ClientSession): Promise<IInstallment['id'][]> {
-        let ids: IInstallment['id'][] = [];
+    private async getInstallments(insurance: IInsurance, session: ClientSession): Promise<IInstallment['_id'][]> {
+        let ids: IInstallment['_id'][] = [];
 
         switch (insurance.installmentType) {
             case InstallmentType.Yearly: {

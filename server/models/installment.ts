@@ -4,7 +4,7 @@ import { IInsurance } from './insurance';
 const { Date, ObjectId, Boolean } = Schema.Types;
 
 export interface IInstallment {
-    id: String,
+    _id: String,
     startDate: Date;
     endDate: Date;
     isPaid: Boolean,

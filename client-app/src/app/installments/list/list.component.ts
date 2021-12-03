@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { InstallmentsService } from '../services/installments.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { InstallmentsService } from '../services/installments.service';
 })
 export class ListComponent implements OnInit, OnChanges {
 
-  constructor(private installmentsService: InstallmentsService) { }
+  constructor(private installmentsService: InstallmentsService, private snackBar: MatSnackBar) { }
 
   @Input() installments: any[] = []
   dataSource: any[] = [];
@@ -34,7 +35,21 @@ export class ListComponent implements OnInit, OnChanges {
 
 
   private paidOrUnpaid(installment: any, flag: boolean) {
-    installment.isPaid = flag;
-    this.installmentsService.updateInstallment(installment).subscribe();
+    let model = { ...installment };
+    model.isPaid = flag;
+    this.installmentsService.updateInstallment(model).subscribe(() => {
+      installment.isPaid = flag;
+    }, err => {
+      this.showSnackbarTopPosition(err.error);
+    });
+  }
+
+  private showSnackbarTopPosition(content: any) {
+    this.snackBar.open(content, '', {
+      duration: 5000,
+      verticalPosition: "top", // Allowed values are  'top' | 'bottom'
+      horizontalPosition: "right", // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'
+      panelClass: ['mat-toolbar', 'mat-warn']
+    });
   }
 }
