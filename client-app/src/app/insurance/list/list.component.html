@@ -2,12 +2,10 @@
     <h1>{{"Insurances" | uppercase }}</h1>
     <mat-form-field class="searchBar" appearance="outline">
         <mat-label>Search</mat-label>
-        <input matInput type="text" (keyup)="doFilter($event)">
+        <input matInput type="text" (keyup)="applyFilter($event)">
     </mat-form-field>
     <button id="createButton" mat-raised-button color="primary" routerLink="/insurances/create">Create new</button>
 </div>
-
-
 
 <table mat-table matSort [dataSource]="insurances" class="mat-elevation-z8">
     <ng-container matColumnDef="owner">
