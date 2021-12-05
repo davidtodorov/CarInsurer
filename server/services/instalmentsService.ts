@@ -6,8 +6,8 @@ export default class InstallmentService {
     constructor() { 
     }
 
-    public async getInstallments(id: string): Promise<IInstallment[]> {
-        let installments = await Installment.find(id ? { _id: id } : {});
+    public async getInstallmentsByInsuranceId(insuranceId: string): Promise<IInstallment[]> {
+        let installments = await Installment.find({ insurance: insuranceId });
         return installments;
     }
 
