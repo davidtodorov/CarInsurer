@@ -1,31 +1,30 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { InsuranceService } from '../services/insurance.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/user/services/user.service';
-import { first, map, mergeMap, startWith } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { Observable, pipe } from 'rxjs';
 import { IUser } from 'src/app/user/models/IUser';
 import IInsuranceForm from '../models/IInsuranceForm';
+import { MatSnackBarService } from 'src/app/shared/services/mat-snack-bar.service';
 
 @Component({
   selector: 'app-insurance-create-form',
   templateUrl: './create-form.component.html',
   styleUrls: ['./create-form.component.css']
 })
-export class CreateFormComponent implements OnInit, OnChanges {
+export class CreateFormComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private insuranceService: InsuranceService,
     private userService: UserService,
-    private snackBar: MatSnackBar) {
+    private snackBarService: MatSnackBarService) {
 
     this.setEndDate(this.startDate);
   }
-
 
   id: string | undefined;
   isAddMode: boolean = false;
@@ -48,7 +47,7 @@ export class CreateFormComponent implements OnInit, OnChanges {
   ];
 
   users: IUser[] = [];
-  //currentInsurance: IInsuranceForm | undefined;
+  currentInsurance: IInsuranceForm | undefined;
   userIdentityNumberOptions: Number[] = [];
   userIdentityNumberFilteredOptions: Observable<any> | undefined;
 
@@ -70,8 +69,6 @@ export class CreateFormComponent implements OnInit, OnChanges {
     }),
   });
 
-  @Input() currentInsurance: any;
-
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
@@ -86,50 +83,26 @@ export class CreateFormComponent implements OnInit, OnChanges {
         );
       });
     } else {
-      // this.currentInsurance
-
-      // let insurance = this.currentInsurance;
-      // let owner = insurance.car.owner;
-      // let car = insurance.car;
-      // this.createForm.patchValue({
-      //   owner,
-      //   car,
-      //   insurance
-      // });
-      // this.insuranceService.loadInsurances(this.id).subscribe(insurances => {
-      //   let insurance = insurances[0];
-      //   let owner = insurance.car.owner;
-      //   let car = insurance.car;
-      //   this.createForm.patchValue({
-      //     owner,
-      //     car,
-      //     insurance
-      //   })
-      // })
+      this.insuranceService.loadInsurances(this.id).subscribe(insurances => {
+        let insurance = insurances[0];
+        let owner = insurance.car.owner;
+        let car = insurance.car;
+        this.createForm.patchValue({
+          owner,
+          car,
+          insurance
+        })
+      });
     }
 
     this.addFormFieldHandlers();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.currentInsurance.currentValue) {
-      let insurance = changes.currentInsurance.currentValue;
-      let owner = insurance.car.owner;
-      let car = insurance.car;
-
-      this.createForm.patchValue({
-        owner,
-        car,
-        insurance
-      });
-    }
   }
 
   onSubmit(): void {
     this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
       this.router.navigate([''])
     }, err => {
-      this.showSnackbarTopPosition(err.error);
+      this.snackBarService.open(err.error);
     });
   }
 
@@ -169,15 +142,6 @@ export class CreateFormComponent implements OnInit, OnChanges {
       newAmount = cost / 4
     }
     this.createForm.get('insurance.dueAmount')?.setValue(newAmount);
-  }
-
-  private showSnackbarTopPosition(content: any) {
-    this.snackBar.open(content, '', {
-      duration: 5000,
-      verticalPosition: "top", // Allowed values are  'top' | 'bottom'
-      horizontalPosition: "center", // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'
-      panelClass: ['mat-toolbar', 'mat-warn']
-    });
   }
 
   private addFormFieldHandlers() {
