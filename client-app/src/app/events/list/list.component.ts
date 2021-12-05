@@ -3,6 +3,7 @@ import { EventService } from '../services/event.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
+import { EventResponse } from '../models/EventResponse';
 
 @Component({
   selector: 'app-event-list',
@@ -13,7 +14,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   constructor(private route: ActivatedRoute, private eventService: EventService) { }
 
   insuranceId: string | undefined;
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<EventResponse>([]);
   displayedColumns: string[] = ['owner', 'plateNumber', 'startDate', 'description', 'actions']
 
   @ViewChild(MatSort) sort!: MatSort;

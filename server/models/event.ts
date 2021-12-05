@@ -8,7 +8,6 @@ export interface IInsuranceEvent {
     _id: String,
     date: Date;
     description: String;
-    car: ICar['id'];
     images: String[]
     insurance: IInsurance['id'];
 }

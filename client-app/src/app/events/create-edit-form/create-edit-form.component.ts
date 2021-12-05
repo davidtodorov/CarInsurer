@@ -2,6 +2,8 @@ import { Component, ElementRef, Input, OnChanges, OnInit, Output, SimpleChanges,
 import { FormBuilder, FormControl, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InsuranceService } from 'src/app/insurance/services/insurance.service';
+import { CarouselImage } from 'src/app/shared/models/CarouselImage';
+import { TextValue } from 'src/app/shared/models/TextValue';
 import { EventService } from '../services/event.service';
 
 @Component({
@@ -36,8 +38,8 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   });
 
   insurances: any[] = [];
-  insuranceOptions: any[] = [];
-  addedImages: any[] = [];
+  insuranceOptions: TextValue[] = [];
+  addedImages: CarouselImage[] = [];
   fileNames: string[] = [];
 
   ngOnInit(): void {
