@@ -19,10 +19,7 @@ export default {
         if (extended === "true") {
             query
                 .populate('installments')
-                .populate({
-                    path: 'events',
-                    select: 'date description images'
-                })
+                .populate('events')
 
         }
         let insurances = await query.exec();

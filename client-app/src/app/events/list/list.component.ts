@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { EventService } from '../services/event.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-event-list',
@@ -9,33 +10,40 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, AfterViewInit {
-  constructor(private eventService: EventService) { }
-  
+  constructor(private route: ActivatedRoute, private eventService: EventService) { }
 
-  events = new MatTableDataSource<any>([]);
+  insuranceId: string | undefined;
+  dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = ['owner', 'plateNumber', 'startDate', 'description', 'actions']
 
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
-    this.eventService.loadEvents().subscribe(data => {
-      this.events.data = data;
-    })
-
+    this.insuranceId = this.route.snapshot.params['id'];
+    if(this.insuranceId) {
+      this.eventService.loadEventsByInsuranceId(this.insuranceId).subscribe(data => {
+        this.dataSource.data = data;
+      });
+    } else {
+      this.eventService.loadEvents().subscribe(data => {
+        this.dataSource.data = data;
+      })
+    }
+    
     this.registerDataSourceFilterHandler();
     this.registerDataSourceSortDataAccessor();
   }
 
   ngAfterViewInit(): void {
-    this.events.sort = this.sort;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(value: any) {
-    this.events.filter = value.target.value.trim().toLocaleLowerCase();
+    this.dataSource.filter = value.target.value.trim().toLocaleLowerCase();
   }
 
   private registerDataSourceFilterHandler() {
-    this.events.filterPredicate = function (data, filter: string): boolean {
+    this.dataSource.filterPredicate = function (data, filter: string): boolean {
       return data.insurance.car.owner.firstName.toLowerCase().includes(filter) ||
         data.insurance.car.owner.lastName.toLowerCase().includes(filter) ||
         data.insurance.car.plateNumber.toLowerCase().includes(filter) ||
@@ -44,7 +52,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   }
 
   private registerDataSourceSortDataAccessor() {
-    this.events.sortingDataAccessor = function (data: any, sortHeaderId: string) {
+    this.dataSource.sortingDataAccessor = function (data: any, sortHeaderId: string) {
       if (sortHeaderId === 'owner') {
         const owner = data.insurance.car.owner;
         return `${owner.firstName.toLowerCase()} ${owner.lastName.toLowerCase()}`;

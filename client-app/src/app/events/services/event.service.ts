@@ -16,6 +16,11 @@ export class EventService {
     return this.http.get<any[]>(url);
   }
 
+  loadEventsByInsuranceId(id: string): Observable<any[]> {
+    const param =`/?insuranceId=${id}`;
+    return this.http.get<any[]>(this.url + param);
+  }
+
   createEvent(data: any) {
     return this.http.post(this.url, data);
   }
