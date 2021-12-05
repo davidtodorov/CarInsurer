@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { InsuranceService } from '../services/insurance.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { Observable, pipe } from 'rxjs';
 import { IUser } from 'src/app/user/models/IUser';
 import IInsuranceForm from '../models/IInsuranceForm';
 import { MatSnackBarService } from 'src/app/shared/services/mat-snack-bar.service';
+import { plateNumberValidator } from 'src/app/shared/validators';
 
 @Component({
   selector: 'app-insurance-create-form',
@@ -51,66 +52,24 @@ export class CreateFormComponent implements OnInit {
   userIdentityNumberOptions: Number[] = [];
   userIdentityNumberFilteredOptions: Observable<any> | undefined;
 
-  createForm = this.fb.group({
-    insurance: this.fb.group({
-      startDate: [this.startDate, [Validators.required]],
-      cost: [null, [Validators.required]],
-      dueAmount: [{ value: null, disabled: true }, [Validators.required]],
-      installmentType: ['', [Validators.required]]
-    }),
-    car: this.fb.group({
-      plateNumber: ['', [this.plateNumberValidator()]],
-      productionDate: [null, [Validators.required]],
-    }),
-    owner: this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      identityNumber: ['', [Validators.required]]
-    }),
-  });
+  createForm!: FormGroup;
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
 
-    if (this.isAddMode) {
-      this.userService.loadUsers().subscribe(users => {
-        this.users = users;
-        this.userIdentityNumberOptions = users.map(x => x.identityNumber);
-        this.userIdentityNumberFilteredOptions = this.createForm.get('owner.identityNumber')?.valueChanges.pipe(
-          startWith(''),
-          map((value) => this.filter(value))
-        );
-      });
-    } else {
-      this.insuranceService.loadInsurances(this.id).subscribe(insurances => {
-        let insurance = insurances[0];
-        let owner = insurance.car.owner;
-        let car = insurance.car;
-        this.createForm.patchValue({
-          owner,
-          car,
-          insurance
-        })
-      });
-    }
-
+    this.addForm();
     this.addFormFieldHandlers();
+
+    if (this.isAddMode) {
+      this.loadUsers();
+    } else {
+      this.loadInsurance();
+    }
   }
 
   onSubmit(): void {
-    this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
-      this.router.navigate([''])
-    }, err => {
-      this.snackBarService.open(err.error);
-    });
-  }
-
-  plateNumberValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const isValid = /^(E|A|B|BT|BH|BP|EB|TX|K|KH|OB|M|PA|PK|EH|PB|PP|P|CC|CH|CO|C|CA|CB|CT|T|X|H|Y)(\d{4})([A|B|E|K|M|H|O|P|C|T|Y|X]{2})$/.test(control.value);
-      return isValid ? null : { pattern: { value: control.value } };
-    };
+    this.isAddMode ? this.createInsurance : this.updateInsurance;
   }
 
   onIdentityNumberBlur(event: FocusEvent) {
@@ -174,6 +133,66 @@ export class CreateFormComponent implements OnInit {
   private disableControlAndSetValue(control: AbstractControl | null, value: String | undefined) {
     control?.disable();
     control?.setValue(value);
+  }
+
+  private loadUsers() {
+    this.userService.loadUsers().subscribe(users => {
+      this.users = users;
+      this.userIdentityNumberOptions = users.map(x => x.identityNumber);
+      this.userIdentityNumberFilteredOptions = this.createForm.get('owner.identityNumber')?.valueChanges.pipe(
+        startWith(''),
+        map((value) => this.filter(value))
+      );
+    });
+  }
+
+  private loadInsurance() {
+    this.insuranceService.loadInsurances(this.id).subscribe(insurances => {
+      let insurance = insurances[0];
+      let owner = insurance.car.owner;
+      let car = insurance.car;
+      this.createForm.patchValue({
+        owner,
+        car,
+        insurance
+      })
+    });
+  }
+
+  private addForm() {
+    this.createForm = this.fb.group({
+      insurance: this.fb.group({
+        startDate: [this.startDate, [Validators.required]],
+        cost: [null, [Validators.required]],
+        dueAmount: [{ value: null, disabled: true }, [Validators.required]],
+        installmentType: ['', [Validators.required]]
+      }),
+      car: this.fb.group({
+        plateNumber: [{ value: '', disabled: !this.isAddMode }, [plateNumberValidator()]],
+        productionDate: [{ value: '', disabled: !this.isAddMode }, [Validators.required]],
+      }),
+      owner: this.fb.group({
+        firstName: [{ value: '', disabled: !this.isAddMode }, [Validators.required]],
+        lastName: [{ value: '', disabled: !this.isAddMode }, [Validators.required]],
+        identityNumber: [{ value: '', disabled: !this.isAddMode }, [Validators.required]]
+      }),
+    });
+  }
+
+  private createInsurance() {
+    this.insuranceService.createInsurance(this.createForm.value).subscribe(data => {
+      this.router.navigate([''])
+    }, err => {
+      this.snackBarService.open(err.error);
+    });
+  }
+
+  private updateInsurance() {
+    this.insuranceService.updateInsurance(this.createForm.value).subscribe(() => {
+      this.snackBarService.open("Updated Successfully!")
+    }, err => {
+      this.snackBarService.open(err.error);
+    })
   }
 
 }
