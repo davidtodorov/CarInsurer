@@ -2,6 +2,9 @@ import { ClientSession } from "mongoose";
 import moment from 'moment'
 import { IInsurance, InstallmentType, Insurance } from "../models/insurance";
 import { IInstallment, Installment } from "../models/installment";
+import { Car, ICar } from "../models/car";
+import { User } from "../models/user";
+import { InsuranceEvent } from "../models/event";
 
 export default class InsuranceService {
     constructor() {
@@ -32,6 +35,18 @@ export default class InsuranceService {
 
         insurance.installments = await this.getInstallments(insurance, session);
         return new Insurance(insurance).save({ session });
+    }
+
+    public async deleteInsurance(id: string) {
+        let insurance = await Insurance.findOne({ _id: id }).populate('car');
+        let car = insurance?.car as any as ICar;
+        let carId = car._id;
+        let userId = car.owner;
+        await User.deleteOne({ _id: userId });
+        await Car.deleteOne({ _id: carId });
+        await Installment.deleteMany({ _id: { $in: insurance?.installments || [] } });
+        await InsuranceEvent.deleteMany({ insurance: id });
+        return await Insurance.deleteOne({ _id: id })
     }
 
     private getDueAmount(model: IInsurance): number {
