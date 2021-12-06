@@ -36,7 +36,7 @@
                 <button mat-icon-button [routerLink]="'/events/' + item._id">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button color="warn">
+                <button mat-icon-button color="warn" (click)="openDeleteDialog(item._id)">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>

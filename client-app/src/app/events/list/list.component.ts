@@ -4,6 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import { EventResponse } from '../models/EventResponse';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from 'src/app/shared/delete-dialog/delete-dialog.component';
+import { MatSnackBarService } from 'src/app/shared/services/mat-snack-bar.service';
 
 @Component({
   selector: 'app-event-list',
@@ -11,7 +14,10 @@ import { EventResponse } from '../models/EventResponse';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, AfterViewInit {
-  constructor(private route: ActivatedRoute, private eventService: EventService) { }
+  constructor(private route: ActivatedRoute, 
+    private dialog: MatDialog,
+    private snackBarService: MatSnackBarService,
+    private eventService: EventService) { }
 
   insuranceId: string | undefined;
   dataSource = new MatTableDataSource<EventResponse>([]);
@@ -41,6 +47,29 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   applyFilter(value: any) {
     this.dataSource.filter = value.target.value.trim().toLocaleLowerCase();
+  }
+
+  openDeleteDialog(id: string) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        id
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(id => {
+      if (id) {
+        this.eventService.deleteEvent(id)
+          .subscribe(() => {
+            this.eventService.loadEvents().subscribe(data => {
+              this.dataSource.data = data;
+              this.snackBarService.open("Deleted Successfully!");
+
+            })
+          }, err => {
+            this.snackBarService.open(err.error);
+          });
+      }
+    })
   }
 
   private registerDataSourceFilterHandler() {

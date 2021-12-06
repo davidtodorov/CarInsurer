@@ -13,7 +13,7 @@ export enum InstallmentType {
 }
 
 export interface IInsurance {
-    id: String,
+    _id: String,
     startDate: Date;
     endDate: Date;
     cost: number;

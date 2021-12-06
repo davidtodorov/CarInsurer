@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { IInsuranceEvent, InsuranceEvent } from '../models/event';
 import { Installment } from '../models/installment';
-import { Insurance } from '../models/insurance';
+import { Insurance, IInsurance } from '../models/insurance';
 import moment from 'moment'
+import { Model } from 'mongoose';
 
 
 export default {
@@ -53,5 +54,16 @@ export default {
         insurance?.save();
 
         return res.send(event);
+    },
+    delete: async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        let event = await InsuranceEvent.findOne({ _id: id });
+        // let insurance = event?.insurance as any as IInsurance;
+        // await Insurance.updateOne(
+        //     { _id: insurance._id},
+        //     { $pull: { events: { _id: id } } }
+        // )
+        let result = await InsuranceEvent.deleteOne({ _id: id });
+        res.send(result);
     }
 }

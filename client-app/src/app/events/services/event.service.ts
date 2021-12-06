@@ -22,11 +22,15 @@ export class EventService {
     return this.http.get<EventResponse[]>(this.url, { params });
   }
 
-  createEvent(data: any) {
+  createEvent(data: FormData) {
     return this.http.post(this.url, data);
   }
 
   updateEvenet(data: any) {
     return this.http.put(this.url, data);
+  }
+
+  deleteEvent(id: string) {
+    return this.http.delete(this.url + `/${id}`);
   }
 }

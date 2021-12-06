@@ -28,6 +28,7 @@ let upload = multer({ storage });
 router.get('/', handlePromiseErrors(controllers.events.get));
 router.get('/:id', handlePromiseErrors(controllers.events.get));
 router.post('/', upload.array('file'), handlePromiseErrors(controllers.events.post));
+router.delete('/:id', handlePromiseErrors(controllers.events.delete));
 
 export default router;
 

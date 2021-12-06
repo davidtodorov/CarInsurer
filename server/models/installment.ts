@@ -8,7 +8,7 @@ export interface IInstallment {
     startDate: Date;
     endDate: Date;
     isPaid: Boolean,
-    insurance: IInsurance['id']
+    insurance: IInsurance['_id']
 
 }
 const schema = new Schema<IInstallment>({

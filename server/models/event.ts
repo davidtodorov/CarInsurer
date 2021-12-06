@@ -9,7 +9,7 @@ export interface IInsuranceEvent {
     date: Date;
     description: String;
     images: String[]
-    insurance: IInsurance['id'];
+    insurance: IInsurance['_id'];
 }
 const schema = new Schema<IInsuranceEvent>({
     date: { type: Date, required: true },

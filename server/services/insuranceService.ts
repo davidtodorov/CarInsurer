@@ -79,7 +79,7 @@ export default class InsuranceService {
 
         switch (insurance.installmentType) {
             case InstallmentType.Yearly: {
-                let installment = await new Installment({ insurance: insurance.id, startDate: insurance.startDate, endDate: insurance.endDate }).save({ session });
+                let installment = await new Installment({ insurance: insurance._id, startDate: insurance.startDate, endDate: insurance.endDate }).save({ session });
                 ids.push(installment.id);
                 break;
             }
@@ -87,8 +87,8 @@ export default class InsuranceService {
                 for (let i = 0; i < 2; i++) {
                     const newStartDate = moment(insurance.startDate).add(i * 6, 'months').toDate();
                     const newEndDate = moment(insurance.startDate).add((i + 1) * 6, 'months').subtract(1, 'days').endOf('day').toDate();
-                    let installment = await new Installment({ insurance: insurance.id, startDate: newStartDate, endDate: newEndDate }).save({ session });
-                    ids.push(installment.id);
+                    let installment = await new Installment({ insurance: insurance._id, startDate: newStartDate, endDate: newEndDate }).save({ session });
+                    ids.push(installment._id);
                 }
                 break;
             }
@@ -96,9 +96,9 @@ export default class InsuranceService {
                 for (let i = 0; i < 4; i++) {
                     const newStartDate = moment(insurance.startDate).add(i, 'quarters').toDate();
                     const newEndDate = moment(insurance.startDate).add(i + 1, 'quarters').subtract(1, 'days').endOf('day').toDate();
-                    let installment = new Installment({ insurance: insurance.id, startDate: newStartDate, endDate: newEndDate });
+                    let installment = new Installment({ insurance: insurance._id, startDate: newStartDate, endDate: newEndDate });
                     await installment.save({ session });
-                    ids.push(installment.id);
+                    ids.push(installment._id);
                 }
                 break;
             }
