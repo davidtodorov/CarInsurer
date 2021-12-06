@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -18,8 +18,8 @@ export class EventService {
   }
 
   loadEventsByInsuranceId(id: string): Observable<EventResponse[]> {
-    const param =`/?insuranceId=${id}`;
-    return this.http.get<EventResponse[]>(this.url + param);
+    let params = new HttpParams().set('insuranceId', id)
+    return this.http.get<EventResponse[]>(this.url, { params });
   }
 
   createEvent(data: any) {

@@ -69,7 +69,7 @@ export class CreateFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.isAddMode ? this.createInsurance : this.updateInsurance;
+    this.isAddMode ? this.createInsurance() : this.updateInsurance();
   }
 
   onIdentityNumberBlur(event: FocusEvent) {

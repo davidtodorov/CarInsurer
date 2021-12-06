@@ -48,7 +48,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       if (sortHeaderId === 'owner') {
         return `${data.car.owner.firstName.toLowerCase()} ${data.car.owner.lastName.toLowerCase()}`
       }
-      else if (sortHeaderId = 'plateNumber') {
+      else if (sortHeaderId === 'plateNumber') {
         return data.car.plateNumber;
       }
       return data[sortHeaderId];

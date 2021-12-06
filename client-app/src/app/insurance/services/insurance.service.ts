@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import IInsuranceForm from '../models/IInsuranceForm';
+import Insurance from '../models/Insurance';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,7 @@ export class InsuranceService {
 
   public loadInsurances(id?: string, extended: boolean = false) {
     let url = id ? `${this.url}/${id}` : this.url;
-    if (extended) {
-      url+= '?extended=true'
-    };
-    return this.http.get<any[]>(url);
+    return this.http.get<Insurance[]>(url);
   }
 
   public createInsurance(data: IInsuranceForm) {

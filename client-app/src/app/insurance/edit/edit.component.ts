@@ -8,17 +8,7 @@ import { InsuranceService } from '../services/insurance.service';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent implements OnInit {
-
-  constructor(private route: ActivatedRoute, private insuranceService: InsuranceService,) { }
-
-  currentInsurance: any;
-
-  ngOnInit(): void {
-    let id =  this.route.snapshot.params['id'];
-    this.insuranceService.loadInsurances(id, true).subscribe(insurances => {
-      this.currentInsurance = insurances[0];
-    })
-  }
+export class EditComponent {
+  constructor() { }
 
 }

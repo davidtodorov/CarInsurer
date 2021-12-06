@@ -15,7 +15,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   insuranceId: string | undefined;
   dataSource = new MatTableDataSource<EventResponse>([]);
-  displayedColumns: string[] = ['owner', 'plateNumber', 'startDate', 'description', 'actions']
+  displayedColumns: string[] = ['owner', 'plateNumber', 'date', 'description', 'actions']
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -58,7 +58,7 @@ export class ListComponent implements OnInit, AfterViewInit {
         const owner = data.insurance.car.owner;
         return `${owner.firstName.toLowerCase()} ${owner.lastName.toLowerCase()}`;
       }
-      else if (sortHeaderId = 'plateNumber') {
+      else if (sortHeaderId === 'plateNumber') {
         return data.insurance.car.plateNumber;
       }
       return data[sortHeaderId];

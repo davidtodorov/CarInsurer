@@ -19,8 +19,8 @@
         <td mat-cell *matCellDef="let item"> {{item.insurance.car.plateNumber }} </td>
     </ng-container>
 
-    <ng-container matColumnDef="startDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
         <td mat-cell *matCellDef="let item"> {{item.date | date }} </td>
     </ng-container>
 
