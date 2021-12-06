@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InsuranceService } from 'src/app/insurance/services/insurance.service';
 import { CarouselImage } from 'src/app/shared/models/CarouselImage';
 import { TextValue } from 'src/app/shared/models/TextValue';
+import { MatSnackBarService } from 'src/app/shared/services/mat-snack-bar.service';
 import { EventService } from '../services/event.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private snackBarService: MatSnackBarService,
     private insuranceService: InsuranceService,
     private eventService: EventService) {
 
@@ -34,7 +36,7 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
     insurance: [null, [Validators.required]],
     date: [null, [Validators.required]],
     description: [null, [Validators.required]],
-    files: [null]
+    files: [[]]
   });
 
   insurances: any[] = [];
@@ -76,7 +78,6 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
-    // this.submitHandler.emit(this.eventForm.value);
     let formData = new FormData();
     for (const file of this.eventForm.get('files')?.value) {
       formData.append('file', file);
@@ -90,6 +91,8 @@ export class CreateEditFormComponent implements OnInit, OnChanges {
 
     this.eventService.createEvent(formData).subscribe(() => {
       this.router.navigate(['/events'])
+    }, err => {
+      this.snackBarService.open(err.error)
     });
   }
 

@@ -13,7 +13,7 @@ export default {
         if (id) {
             queryOptions = { _id: id };
         } else if (insuranceId) {
-            queryOptions = { insurance: insuranceId}
+            queryOptions = { insurance: insuranceId }
         };
         const events = await InsuranceEvent.find(queryOptions).populate({
             path: 'insurance',
@@ -30,9 +30,6 @@ export default {
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
         let files = req.files as any;
-        if (files.length === 0) {
-            return res.status(500).send({ message: 'Upload fail' });
-        };
         const reqModel = req.body as IInsuranceEvent;
         console.log(reqModel.date)
 
@@ -43,16 +40,18 @@ export default {
         }
 
         let images: String[] = [];
-        files.forEach((file: Express.Multer.File) => {
-            images.push(file.filename);
-        });
+        if (files) {
+            files.forEach((file: Express.Multer.File) => {
+                images.push(file.filename);
+            });
+        }
 
         let event = await InsuranceEvent.create({ insurance: reqModel.insurance, date: reqModel.date, description: reqModel.description, images });
         let insurance = await Insurance.findOne({ _id: reqModel.insurance });
 
         insurance?.events.push(event._id);
         insurance?.save();
-        
+
         return res.send(event);
     }
 }
