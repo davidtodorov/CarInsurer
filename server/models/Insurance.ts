@@ -20,7 +20,7 @@ export interface IInsurance {
     dueAmount: number;
     installmentType: String;
     installments: IInstallment['_id'][];
-    car: ICar['id'];
+    car: ICar['_id'];
     events: IInsuranceEvent['_id'][];
 }
 

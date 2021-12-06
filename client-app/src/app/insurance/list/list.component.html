@@ -46,7 +46,7 @@
                 <button mat-icon-button [routerLink]="'/insurances/' + element._id">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button color="warn">
+                <button mat-icon-button color="warn" (click)="openDeleteDialog(element._id)">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>

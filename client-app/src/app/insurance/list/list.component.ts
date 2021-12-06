@@ -2,6 +2,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { InsuranceService } from '../services/insurance.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBarService } from 'src/app/shared/services/mat-snack-bar.service';
+import { DeleteDialogComponent } from 'src/app/shared/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-insurance-list',
@@ -9,7 +12,9 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, AfterViewInit {
-  constructor(private insuranceService: InsuranceService) { }
+  constructor(private dialog: MatDialog,
+    private snackBarService: MatSnackBarService,
+    private insuranceService: InsuranceService) { }
 
   public insurances = new MatTableDataSource<any>([]);
   public displayedColumns: string[] = ['owner', 'plateNumber', 'startDate', 'endDate', 'cost', 'dueAmount', 'actions']
@@ -53,5 +58,28 @@ export class ListComponent implements OnInit, AfterViewInit {
       }
       return data[sortHeaderId];
     }
+  }
+
+  openDeleteDialog(id: string) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        id
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(id => {
+      if (id) {
+        this.insuranceService.deleteInsurance(id)
+          .subscribe(() => {
+            this.insuranceService.loadInsurances().subscribe(insuranes => {
+              this.insurances.data = insuranes;
+              this.snackBarService.open("Deleted Successfully!");
+            });
+
+          }, err => {
+            this.snackBarService.open(err.error);
+          });
+      }
+    })
   }
 }

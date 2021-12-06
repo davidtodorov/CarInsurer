@@ -20,10 +20,10 @@ export default class InsuranceWorkflow {
     public async create(model: IInsuraceWorkflow, session: ClientSession){
         const owner = await this.userService.getOrCreateUser(model.owner, session);
         
-        model.car.owner = owner.id;
+        model.car.owner = owner._id;
         const car = await this.carService.createCar(model.car, session);
 
-        model.insurance.car = car.id;
+        model.insurance.car = car._id;
         const insurance = await this.insuraceService.createInsurance(model.insurance, session);
 
         return insurance;

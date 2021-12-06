@@ -9,6 +9,7 @@ import { EditComponent } from './edit/edit.component';
 import { InstallmentsModule } from '../installments/installments.module';
 import { ListComponent as InstallmentsListComponent} from '../installments/list/list.component';
 import { EventsModule } from '../events/events.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { EventsModule } from '../events/events.module';
   imports: [
     CommonModule,
     RouterModule,
+    SharedModule,
     MaterialModule,
     ReactiveFormsModule,
     InstallmentsModule,

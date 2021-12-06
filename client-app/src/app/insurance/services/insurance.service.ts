@@ -24,4 +24,8 @@ export class InsuranceService {
   public updateInsurance(data: IInsuranceForm) {
     return this.http.put(this.url, data);
   }
+
+  public deleteInsurance(id: string) {
+    return this.http.delete(this.url + `/${id}`);
+  }
 }

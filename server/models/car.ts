@@ -4,10 +4,10 @@ import { IUser } from './user';
 const { String, Date, ObjectId } = Schema.Types;
 
 export interface ICar {
-    id: String,
+    _id: String,
     plateNumber: String;
     productionDate: Date;
-    owner: IUser['id'];
+    owner: IUser['_id'];
 }
 
 const carSchema = new Schema<ICar>({

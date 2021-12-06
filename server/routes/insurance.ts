@@ -10,5 +10,7 @@ router.get('/:id', handlePromiseErrors(controllers.insurance.get));
 
 router.post('/', handlePromiseErrors(controllers.insurance.post));
 
+router.delete('/:id', handlePromiseErrors(controllers.insurance.delete))
+
 export default router;
 

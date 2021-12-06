@@ -3,7 +3,7 @@ import { Schema, Document, model } from 'mongoose';
 const { String, Number } = Schema.Types;
 
 export interface IUser {
-    id: String,
+    _id: String,
     firstName: String;
     middleName?: String;
     lastName: String;
