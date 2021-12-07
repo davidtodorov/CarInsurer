@@ -12,7 +12,6 @@ export default {
     },
     put: async (req: Request, res: Response, next: NextFunction) => {
         const model = req.body as IInstallment;
-        
         const result = await app.serviceContainer.installmentService.updateInstallment(model);
         res.send(result);
     }

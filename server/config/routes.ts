@@ -6,7 +6,7 @@ export default (app: express.Application) => {
 
     app.use('/api/users', routes.user);
 
-    app.use('/api/cars', routes.car);
+    //app.use('/api/cars', routes.car);
 
     app.use('/api/installments', routes.installment);
 

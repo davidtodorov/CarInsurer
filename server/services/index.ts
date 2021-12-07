@@ -1,4 +1,5 @@
 import CarService from "./carService";
+import EventService from "./eventService";
 import InstallmentService from "./instalmentsService";
 import InsuranceService from "./insuranceService";
 import InsuranceWorkflow from "./insuranceWorkflow";
@@ -10,6 +11,7 @@ export class ServiceContainer {
     public insuranceService: InsuranceService;
     public insuranceWorkflow: InsuranceWorkflow;
     public installmentService: InstallmentService;
+    public eventService: EventService;
 
     constructor() {
         this.userService = new UserService();
@@ -17,6 +19,7 @@ export class ServiceContainer {
         this.insuranceService = new InsuranceService();
         this.insuranceWorkflow = new InsuranceWorkflow(this.insuranceService, this.carService, this.userService);
         this.installmentService = new InstallmentService();
+        this.eventService = new EventService();
     }
 
     public init() {

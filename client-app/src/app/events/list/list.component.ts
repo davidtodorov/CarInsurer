@@ -27,15 +27,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.insuranceId = this.route.snapshot.params['id'];
-    if(this.insuranceId) {
-      this.eventService.loadEventsByInsuranceId(this.insuranceId).subscribe(data => {
-        this.dataSource.data = data;
-      });
-    } else {
-      this.eventService.loadEvents().subscribe(data => {
-        this.dataSource.data = data;
-      })
-    }
+    this.loadEvents();
     
     this.registerDataSourceFilterHandler();
     this.registerDataSourceSortDataAccessor();
@@ -60,11 +52,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       if (id) {
         this.eventService.deleteEvent(id)
           .subscribe(() => {
-            this.eventService.loadEvents().subscribe(data => {
-              this.dataSource.data = data;
-              this.snackBarService.open("Deleted Successfully!");
-
-            })
+            this.loadEvents();
           }, err => {
             this.snackBarService.open(err.error);
           });
@@ -91,6 +79,18 @@ export class ListComponent implements OnInit, AfterViewInit {
         return data.insurance.car.plateNumber;
       }
       return data[sortHeaderId];
+    }
+  }
+
+  private loadEvents(){
+    if(this.insuranceId) {
+      this.eventService.loadEventsByInsuranceId(this.insuranceId).subscribe(data => {
+        this.dataSource.data = data;
+      });
+    } else {
+      this.eventService.loadEvents().subscribe(data => {
+        this.dataSource.data = data;
+      })
     }
   }
 

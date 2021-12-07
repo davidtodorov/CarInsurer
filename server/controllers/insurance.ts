@@ -8,15 +8,8 @@ import { IInsuraceWorkflow } from '../services/insuranceWorkflow';
 export default {
     get: async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        const query = Insurance.find(id ? { _id: id } : {}).populate({
-            path: 'car',
-            populate: {
-                path: 'owner'
-            }
-        });
-
-        let insurances = await query.exec();
-        return res.send(insurances);
+        let result = await app.serviceContainer.insuranceService.getInsurance(id);
+        return res.send(result);
     },
     post: async (req: Request, res: Response, next: NextFunction) => {
         const session = await mongoose.startSession();

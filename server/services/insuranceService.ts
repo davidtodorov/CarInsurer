@@ -11,6 +11,17 @@ export default class InsuranceService {
 
     }
 
+    public async getInsurance(id?: string) {
+        const query = Insurance.find(id ? { _id: id } : {}).populate({
+            path: 'car',
+            populate: {
+                path: 'owner'
+            }
+        });
+
+        return await query.exec();
+    }
+
     public async createInsurance(model: IInsurance, session: ClientSession): Promise<IInsurance> {
         model.startDate = this.getStartDate(model);
 
