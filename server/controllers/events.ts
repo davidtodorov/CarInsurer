@@ -39,6 +39,11 @@ export default {
         if (!installmentsTillDate.every(x => x.isPaid === true)) {
             throw new Error("The insurance untill this date is not paid!")
         }
+        if (installmentsTillDate.length === 0) {
+            let startDate = installments.sort((a, b) => b.startDate.getTime() - b.startDate.getTime())[0].startDate;
+            let startDateString = moment(startDate).format("DD/MM/YYYY")
+            throw new Error(`Choose date after or equal to : ${startDateString}`)
+        }
 
         let images: String[] = [];
         if (files) {
