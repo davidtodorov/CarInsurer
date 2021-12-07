@@ -1,11 +1,10 @@
-import { Schema, model, ObjectId } from 'mongoose';
-import { ICar } from './car';
+import { Schema, model, Types } from 'mongoose';
 import { IInsurance } from './insurance';
 
 const { String, Date, ObjectId, Buffer } = Schema.Types;
 
 export interface IInsuranceEvent {
-    _id: String,
+    _id: Types.ObjectId,
     date: Date;
     description: String;
     images: String[]

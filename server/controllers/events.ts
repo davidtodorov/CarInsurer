@@ -3,7 +3,7 @@ import { IInsuranceEvent, InsuranceEvent } from '../models/event';
 import { Installment } from '../models/installment';
 import { Insurance, IInsurance } from '../models/insurance';
 import moment from 'moment'
-import { Model } from 'mongoose';
+import mongoose from 'mongoose';
 
 
 export default {
@@ -58,12 +58,9 @@ export default {
     delete: async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         let event = await InsuranceEvent.findOne({ _id: id });
-        // let insurance = event?.insurance as any as IInsurance;
-        // await Insurance.updateOne(
-        //     { _id: insurance._id},
-        //     { $pull: { events: { _id: id } } }
-        // )
+        let updateInsuranceResult = await Insurance.updateOne({ _id: event?.insurance },
+            { $pull: { events: new mongoose.Types.ObjectId(id) }});
         let result = await InsuranceEvent.deleteOne({ _id: id });
         res.send(result);
     }
-}
+}   

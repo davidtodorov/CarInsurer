@@ -1,10 +1,10 @@
-import { model, Schema, ObjectId } from 'mongoose';
+import { model, Schema, Types } from 'mongoose';
 import { IUser } from './user';
 
 const { String, Date, ObjectId } = Schema.Types;
 
 export interface ICar {
-    _id: String,
+    _id: Types.ObjectId ,
     plateNumber: String;
     productionDate: Date;
     owner: IUser['_id'];

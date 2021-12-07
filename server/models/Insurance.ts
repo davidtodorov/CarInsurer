@@ -1,8 +1,8 @@
 const moment = require('moment');
-import { Schema, model, ObjectId } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import { ICar } from './car';
 import { IInsuranceEvent } from './event';
-import { IInstallment, Installment } from './installment';
+import { IInstallment } from './installment';
 
 const { String, Number, Date, ObjectId } = Schema.Types;
 
@@ -13,7 +13,7 @@ export enum InstallmentType {
 }
 
 export interface IInsurance {
-    _id: String,
+    _id: Types.ObjectId,
     startDate: Date;
     endDate: Date;
     cost: number;

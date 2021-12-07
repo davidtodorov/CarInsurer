@@ -162,10 +162,10 @@ export class CreateFormComponent implements OnInit {
   private addForm() {
     this.createForm = this.fb.group({
       insurance: this.fb.group({
-        startDate: [this.startDate, [Validators.required]],
-        cost: [null, [Validators.required]],
+        startDate: [{ value: this.startDate, disabled: !this.isAddMode }, [Validators.required]],
+        cost: [{ value: null, disabled: !this.isAddMode }, [Validators.required]],
         dueAmount: [{ value: null, disabled: true }, [Validators.required]],
-        installmentType: ['', [Validators.required]]
+        installmentType: [{ value: '', disabled: !this.isAddMode }, [Validators.required]]
       }),
       car: this.fb.group({
         plateNumber: [{ value: '', disabled: !this.isAddMode }, [plateNumberValidator()]],

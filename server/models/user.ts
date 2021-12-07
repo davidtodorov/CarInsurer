@@ -1,9 +1,9 @@
-import { Schema, Document, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 
 const { String, Number } = Schema.Types;
 
 export interface IUser {
-    _id: String,
+    _id: Types.ObjectId,
     firstName: String;
     middleName?: String;
     lastName: String;

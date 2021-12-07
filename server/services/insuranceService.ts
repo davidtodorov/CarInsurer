@@ -41,8 +41,6 @@ export default class InsuranceService {
         let insurance = await Insurance.findOne({ _id: id }).populate('car');
         let car = insurance?.car as any as ICar;
         let carId = car._id;
-        let userId = car.owner;
-        await User.deleteOne({ _id: userId });
         await Car.deleteOne({ _id: carId });
         await Installment.deleteMany({ _id: { $in: insurance?.installments || [] } });
         await InsuranceEvent.deleteMany({ insurance: id });
